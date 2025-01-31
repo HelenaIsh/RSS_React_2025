@@ -6,10 +6,6 @@ interface ResultsProps {
 }
 
 export class Results extends React.Component<ResultsProps> {
-  constructor(props: ResultsProps) {
-    super(props);
-  }
-
   render(): React.ReactNode {
     return typeof this.props.results === 'string' ? (
       <p>{this.props.results}</p>
@@ -22,7 +18,7 @@ export class Results extends React.Component<ResultsProps> {
           </div>
         </div>
         {this.props.results.map((el) => (
-          <ResultsRow element={el} />
+          <ResultsRow element={el} key={el.toString()} />
         ))}
       </>
     ) : null;

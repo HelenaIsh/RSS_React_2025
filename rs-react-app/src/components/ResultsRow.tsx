@@ -5,10 +5,6 @@ interface ResultsRowProps {
 }
 
 export class ResultsRow extends React.Component<ResultsRowProps> {
-  constructor(props: ResultsRowProps) {
-    super(props);
-  }
-
   render(): React.ReactNode {
     const { element } = this.props;
     let title = '';

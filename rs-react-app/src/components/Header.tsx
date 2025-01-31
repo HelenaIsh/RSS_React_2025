@@ -5,10 +5,7 @@ interface HeaderProps {
   setResults: (results: unknown) => void;
 }
 
-export class Header extends React.Component<HeaderProps, {}> {
-  constructor(props: HeaderProps) {
-    super(props);
-  }
+export class Header extends React.Component<HeaderProps> {
   render() {
     return (
       <header>

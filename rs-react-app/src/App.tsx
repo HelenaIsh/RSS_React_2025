@@ -5,8 +5,8 @@ import { ErrorButton } from './components/ErrorButton';
 import { Header } from './components/Header';
 import { Main } from './components/Main';
 
-export default class App extends React.Component<{}, { results: unknown }> {
-  constructor(props: {}) {
+export default class App extends React.Component<object, { results: unknown }> {
+  constructor(props: object) {
     super(props);
     this.state = {
       results: undefined,

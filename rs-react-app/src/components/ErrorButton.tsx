@@ -1,10 +1,10 @@
 import React from 'react';
 
 export class ErrorButton extends React.PureComponent<
-  {},
+  object,
   { hasError: boolean }
 > {
-  constructor(props: {}) {
+  constructor(props: object) {
     super(props);
     this.state = {
       hasError: false,

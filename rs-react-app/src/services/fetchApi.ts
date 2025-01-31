@@ -1,4 +1,4 @@
-export const fetchResults = async (name: string): Promise<any> => {
+export const fetchResults = async (name: string): Promise<unknown> => {
   if (!name) throw new Error('Name is required');
 
   try {

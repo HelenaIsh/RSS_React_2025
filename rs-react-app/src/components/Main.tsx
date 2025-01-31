@@ -5,10 +5,7 @@ interface MainProps {
   results: unknown;
 }
 
-export class Main extends React.Component<MainProps, {}> {
-  constructor(props: MainProps) {
-    super(props);
-  }
+export class Main extends React.Component<MainProps> {
   render(): React.ReactNode {
     return (
       <main>
