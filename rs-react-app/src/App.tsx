@@ -1,21 +1,28 @@
+import React from 'react';
 import './App.css';
 import { ErrorBoundary } from './components/ErrorBoundary';
 import { ErrorButton } from './components/ErrorButton';
 import { Header } from './components/Header';
 import { Main } from './components/Main';
 
-function App() {
-  return (
-    <div className="app">
-      <ErrorBoundary
-        fallback={<h2>Something went wrong. Please try again later.</h2>}
-      >
-        <Header />
-        <Main />
-        <ErrorButton />
-      </ErrorBoundary>
-    </div>
-  );
+export default class App extends React.Component<{}, { results: unknown }> {
+  constructor(props: {}) {
+    super(props);
+    this.state = {
+      results: undefined,
+    };
+  }
+  render() {
+    return (
+      <div className="app">
+        <ErrorBoundary
+          fallback={<h2>Something went wrong. Please try again later.</h2>}
+        >
+          <Header setResults={(results) => this.setState({ results })} />
+          <Main results={this.state.results} />
+          <ErrorButton />
+        </ErrorBoundary>
+      </div>
+    );
+  }
 }
-
-export default App;

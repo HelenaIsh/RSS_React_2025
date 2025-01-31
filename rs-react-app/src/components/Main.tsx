@@ -1,11 +1,18 @@
 import React from 'react';
 import { Results } from './Results';
 
-export class Main extends React.Component {
+interface MainProps {
+  results: unknown;
+}
+
+export class Main extends React.Component<MainProps, {}> {
+  constructor(props: MainProps) {
+    super(props);
+  }
   render(): React.ReactNode {
     return (
       <main>
-        <Results />
+        <Results results={this.props.results} />
       </main>
     );
   }

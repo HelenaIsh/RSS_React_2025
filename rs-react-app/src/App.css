@@ -23,6 +23,7 @@ header {
   display: flex;
   align-items: center;
   justify-content: center;
+  flex-shrink: 0;
 }
 
 .search-form {
@@ -112,4 +113,24 @@ footer {
     border-bottom-color: green;
     border-left-color: yellow;
   }
+}
+
+.row {
+  display: flex;
+  text-align: left;
+}
+
+.row-name {
+  flex: 40% 0 0;
+}
+.row-name--bold {
+  font-weight: 700;
+}
+
+.row-description {
+  flex: 60% 0 0;
+}
+
+.row-description--bold {
+  font-weight: 700;
 }
