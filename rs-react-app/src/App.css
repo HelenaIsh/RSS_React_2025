@@ -1,0 +1,136 @@
+body,
+html {
+  height: 100%;
+}
+
+#root {
+  text-align: center;
+  height: 100%;
+  width: 100%;
+  margin: 20px 100px;
+}
+
+.app {
+  height: 100%;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+header {
+  height: 100px;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.search-form {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.search-form input {
+  flex-grow: 1;
+  height: 35px;
+}
+
+main {
+  flex-grow: 1;
+}
+
+footer {
+  height: 50px;
+  padding: 10px;
+  display: flex;
+  justify-content: flex-end;
+}
+
+.spinner-overlay {
+  position: fixed;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(0, 0, 0, 0.5);
+  z-index: 50;
+}
+
+.spinner {
+  width: 64px;
+  height: 64px;
+  border: 6px solid transparent;
+  border-top-color: red;
+  border-right-color: blue;
+  border-bottom-color: green;
+  border-left-color: yellow;
+  border-radius: 50%;
+  animation:
+    spin 1s linear infinite,
+    color-rotate 2s linear infinite;
+}
+
+@keyframes spin {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes color-rotate {
+  0% {
+    border-top-color: red;
+    border-right-color: blue;
+    border-bottom-color: green;
+    border-left-color: yellow;
+  }
+  25% {
+    border-top-color: blue;
+    border-right-color: green;
+    border-bottom-color: yellow;
+    border-left-color: red;
+  }
+  50% {
+    border-top-color: green;
+    border-right-color: yellow;
+    border-bottom-color: red;
+    border-left-color: blue;
+  }
+  75% {
+    border-top-color: yellow;
+    border-right-color: red;
+    border-bottom-color: blue;
+    border-left-color: green;
+  }
+  100% {
+    border-top-color: red;
+    border-right-color: blue;
+    border-bottom-color: green;
+    border-left-color: yellow;
+  }
+}
+
+.row {
+  display: flex;
+  text-align: left;
+}
+
+.row-name {
+  flex: 40% 0 0;
+}
+.row-name--bold {
+  font-weight: 700;
+}
+
+.row-description {
+  flex: 60% 0 0;
+}
+
+.row-description--bold {
+  font-weight: 700;
+}
