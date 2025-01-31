@@ -1,5 +1,6 @@
 import React from 'react';
 import { Spinner } from './Spinner';
+import { fetchResults } from '../services/fetchApi';
 
 interface SearchFormProps {
   setResults: (results: unknown) => void;
@@ -26,6 +27,26 @@ export class SearchForm extends React.Component<
     };
   }
 
+  async componentDidMount(): Promise<void> {
+    const name = localStorage.getItem('search') || '';
+    this.setState({ loading: true, name });
+    try {
+      const data = await fetchResults(name);
+      this.setState({ results: data || [] });
+      this.props.setResults(data[`${name}s`] || []);
+    } catch (err: unknown) {
+      if (err instanceof Error) {
+        this.setState({ error: err.message });
+        this.props.setResults(err.message);
+      } else {
+        this.setState({ error: 'An unknown error occurred' });
+        this.props.setResults('An unknown error occurred');
+      }
+    } finally {
+      this.setState({ loading: false });
+    }
+  }
+
   handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     const { name } = this.state;
@@ -35,13 +56,7 @@ export class SearchForm extends React.Component<
 
     try {
       localStorage.setItem('search', name);
-      const response = await fetch(
-        `https://stapi.co/api/v1/rest/${name}/search`
-      );
-      if (!response.ok) {
-        throw new Error('Failed to fetch data');
-      }
-      const data = await response.json();
+      const data = await fetchResults(name);
       this.setState({ results: data || [] });
       this.props.setResults(data[`${name}s`] || []);
     } catch (err: unknown) {
