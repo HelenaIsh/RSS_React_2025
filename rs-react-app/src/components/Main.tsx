@@ -12,6 +12,7 @@ interface MainProps {
 export const Main: FC<MainProps> = (props) => {
   const [searchParams] = useSearchParams();
   const [itemId, setItemId] = useState<string | undefined>(undefined);
+  const [details, setDetails] = useState<string | undefined>(undefined);
 
   let page = parseInt(searchParams.get('page') || '1');
   if (+page > +props.totalPages) {
@@ -21,8 +22,8 @@ export const Main: FC<MainProps> = (props) => {
   return (
     <main>
       <div className="main-container">
-        <Results {...props} setItemId={setItemId} />
-        {itemId && <Details details={itemId} setItemId={setItemId} />}
+        <Results {...props} setItemId={setItemId} setDetails={setDetails} />
+        {itemId && <Details details={details} setItemId={setItemId} />}
       </div>
       {Array.isArray(props.results) && props.results.length > 0 && (
         <Pagination totalPages={props.totalPages} currentPage={page} />

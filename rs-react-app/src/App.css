@@ -123,9 +123,6 @@ footer {
   text-align: left;
 }
 
-.row-name {
-  flex: 40% 0 0;
-}
 .row-name--bold {
   font-weight: 700;
 }
@@ -139,8 +136,7 @@ footer {
 }
 
 .results-table {
-  flex: 1;
-  min-width: 70%;
+  flex: 50% 0 0;
 }
 
 .main-container {
@@ -151,11 +147,12 @@ footer {
 }
 
 .details-container {
-  background: rgb(175, 167, 167);
+  background: rgba(255, 255, 255, 0.4);
   height: fit-content;
   border-radius: 10px;
   padding: 10px;
-  flex: 30% 0 0;
+  flex: 50% 0 0;
+  max-width: 50%;
 }
 
 .row {
@@ -165,4 +162,5 @@ footer {
 
 .row:hover {
   transform: scale(1.1);
+  color: rgb(120, 130, 186);
 }

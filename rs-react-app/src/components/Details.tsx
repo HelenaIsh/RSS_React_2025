@@ -1,7 +1,7 @@
 import { FC } from 'react';
 
 interface DetailsProps {
-  details: string;
+  details: string | undefined;
   setItemId: (id: string | undefined) => void;
 }
 
@@ -14,7 +14,7 @@ export const Details: FC<DetailsProps> = ({ details, setItemId }) => {
     <div className="details-container">
       Details:
       <div>
-        <p>id: {details}</p>
+        <p>{details}</p>
       </div>
       <button onClick={closeDetails}>Close</button>
     </div>

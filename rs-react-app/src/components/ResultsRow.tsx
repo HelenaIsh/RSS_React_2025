@@ -19,7 +19,7 @@ export const ResultsRow: FC<ResultsRowProps> = ({ element, id }) => {
   return (
     <div className="row" id={id}>
       <div className="row-name">{title}</div>
-      <div className="row-description">{`Description of ${title}`}</div>
+      {/* <div className="row-description">{`Description of ${title}`}</div> */}
     </div>
   );
 };
