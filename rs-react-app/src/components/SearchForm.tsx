@@ -6,7 +6,7 @@ import { useLocalStorage } from '../hooks/useLocalStorage';
 
 interface SearchFormProps {
   setResults: (results: unknown) => void;
-  setTotalPages: (totalPages: number) => void;
+  setTotalPages: (totalPages: string) => void;
 }
 
 export const SearchForm: FC<SearchFormProps> = ({
@@ -22,7 +22,11 @@ export const SearchForm: FC<SearchFormProps> = ({
     setLoading(true);
     try {
       const page = searchParams.get('page') || '1';
-      const data = await fetchResults(query, page);
+      let data = await fetchResults(query, page);
+      const totalPages = data.page.totalPages;
+      if (+page > +totalPages) {
+        data = await fetchResults(query, totalPages);
+      }
       setResults(data[`${query}s`] || []);
       setTotalPages(data.page.totalPages);
     } catch (err: unknown) {

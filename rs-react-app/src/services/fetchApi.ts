@@ -1,6 +1,6 @@
 interface ApiResponse {
-  page: { totalPages: number };
-  [key: string]: unknown[] | { totalPages: number };
+  page: { totalPages: string };
+  [key: string]: unknown[] | { totalPages: string };
 }
 
 export const fetchResults = async (
@@ -10,7 +10,7 @@ export const fetchResults = async (
   if (!name) throw new Error('Name is required');
   try {
     const response = await fetch(
-      `https://stapi.co/api/v1/rest/${name}/search?pageNumber=${page}`
+      `https://stapi.co/api/v1/rest/${name}/search?pageNumber=${+page - 1}`
     );
     if (!response.ok) {
       throw new Error('Failed to fetch data');

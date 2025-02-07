@@ -1,33 +1,35 @@
 import { FC } from 'react';
-import { useSearchParams } from 'react-router-dom';
 
 import { ResultsRow } from './ResultsRow';
-import { Pagination } from './Pagination';
 
 interface ResultsProps {
   results: unknown;
-  totalPages: number;
+  totalPages: string;
+  setItemId: (itemId: string | undefined) => void;
 }
 
-export const Results: FC<ResultsProps> = ({ results, totalPages }) => {
-  const [searchParams] = useSearchParams();
-
-  const page = parseInt(searchParams.get('page') || '1');
+export const Results: FC<ResultsProps> = ({ results, setItemId }) => {
+  const handleRowClick = (e: React.MouseEvent) => {
+    const target = e.target as HTMLElement;
+    const row = target.closest('.row');
+    if (row) {
+      setItemId(row.id);
+    }
+  };
 
   return typeof results === 'string' ? (
     <p>{results}</p>
   ) : Array.isArray(results) ? (
-    <>
+    <div>
       <div className="row">
         <div className="row-name row-name--bold">Title</div>
         <div className="row-description row-description--bold">Description</div>
       </div>
-      {results.map((el) => {
-        return <ResultsRow element={el} key={el.uid} />;
-      })}
-      {results.length > 0 && (
-        <Pagination totalPages={totalPages} currentPage={page} />
-      )}
-    </>
+      <div onClick={handleRowClick}>
+        {results.map((el) => {
+          return <ResultsRow element={el} key={el.uid} id={el.uid} />;
+        })}
+      </div>
+    </div>
   ) : null;
 };

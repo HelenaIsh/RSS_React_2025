@@ -3,7 +3,7 @@ import { SearchForm } from './SearchForm';
 
 interface HeaderProps {
   setResults: (results: unknown) => void;
-  setTotalPages: (totalPages: number) => void;
+  setTotalPages: (totalPages: string) => void;
 }
 
 export const Header: FC<HeaderProps> = (props) => {

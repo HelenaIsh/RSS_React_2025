@@ -2,9 +2,10 @@ import React, { FC } from 'react';
 
 interface ResultsRowProps {
   element: unknown;
+  id: string;
 }
 
-export const ResultsRow: FC<ResultsRowProps> = ({ element }) => {
+export const ResultsRow: FC<ResultsRowProps> = ({ element, id }) => {
   let title = '';
   if (element && typeof element === 'object') {
     title =
@@ -16,7 +17,7 @@ export const ResultsRow: FC<ResultsRowProps> = ({ element }) => {
   }
 
   return (
-    <div className="row">
+    <div className="row" id={id}>
       <div className="row-name">{title}</div>
       <div className="row-description">{`Description of ${title}`}</div>
     </div>

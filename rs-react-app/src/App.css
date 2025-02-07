@@ -134,3 +134,7 @@ footer {
 .row-description--bold {
   font-weight: 700;
 }
+
+.main-container {
+  display: flex;
+}
