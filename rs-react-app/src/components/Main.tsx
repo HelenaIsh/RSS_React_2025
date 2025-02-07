@@ -1,16 +1,14 @@
-import React from 'react';
+import { FC } from 'react';
 import { Results } from './Results';
 
 interface MainProps {
   results: unknown;
 }
 
-export class Main extends React.Component<MainProps> {
-  render(): React.ReactNode {
+export const Main: FC<MainProps> = ({results}) => {
     return (
       <main>
-        <Results results={this.props.results} />
+        <Results results={results} />
       </main>
     );
-  }
 }

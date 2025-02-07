@@ -1,4 +1,4 @@
-export const fetchResults = async (name: string): Promise<unknown> => {
+export const fetchResults = async (name: string): Promise<Record<string, unknown[]>> => {
   if (!name) throw new Error('Name is required');
 
   try {

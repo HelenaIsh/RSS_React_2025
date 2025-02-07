@@ -1,12 +1,10 @@
-import React from 'react';
+import React, { FC } from 'react';
 
 interface ResultsRowProps {
   element: unknown;
 }
 
-export class ResultsRow extends React.Component<ResultsRowProps> {
-  render(): React.ReactNode {
-    const { element } = this.props;
+export const ResultsRow: FC <ResultsRowProps> = ({element}) => {
     let title = '';
     if (element && typeof element === 'object') {
       title =
@@ -23,5 +21,4 @@ export class ResultsRow extends React.Component<ResultsRowProps> {
         <div className="row-description">{`Description of ${title}`}</div>
       </div>
     );
-  }
 }
