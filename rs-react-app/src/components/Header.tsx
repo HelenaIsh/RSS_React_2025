@@ -6,9 +6,9 @@ interface HeaderProps {
 }
 
 export const Header: FC<HeaderProps> = ({ setResults }) => {
-    return (
-      <header>
-        <SearchForm setResults={setResults} />
-      </header>
-    );
-}
+  return (
+    <header>
+      <SearchForm setResults={setResults} />
+    </header>
+  );
+};
