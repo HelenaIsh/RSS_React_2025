@@ -2,6 +2,7 @@ import { FC, useState } from 'react';
 import { Results } from './Results';
 import { useSearchParams } from 'react-router-dom';
 import { Pagination } from './Pagination';
+import { Details } from './Details';
 
 interface MainProps {
   results: unknown;
@@ -21,7 +22,7 @@ export const Main: FC<MainProps> = (props) => {
     <main>
       <div className="main-container">
         <Results {...props} setItemId={setItemId} />
-        <div>{itemId}</div>
+        {itemId && <Details details={itemId} setItemId={setItemId} />}
       </div>
       {Array.isArray(props.results) && props.results.length > 0 && (
         <Pagination totalPages={props.totalPages} currentPage={page} />

@@ -18,7 +18,7 @@ export const Pagination: FC<PaginationProps> = ({
   };
 
   return (
-    <div>
+    <div className="pagination">
       <button
         onClick={() => changePage(currentPage - 1)}
         disabled={currentPage < 1}

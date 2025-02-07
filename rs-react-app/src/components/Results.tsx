@@ -20,7 +20,7 @@ export const Results: FC<ResultsProps> = ({ results, setItemId }) => {
   return typeof results === 'string' ? (
     <p>{results}</p>
   ) : Array.isArray(results) ? (
-    <div>
+    <div className="results-table">
       <div className="row">
         <div className="row-name row-name--bold">Title</div>
         <div className="row-description row-description--bold">Description</div>

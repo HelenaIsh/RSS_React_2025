@@ -1,23 +1,22 @@
 import { FC } from 'react';
-import { useNavigate } from 'react-router-dom';
 
 interface DetailsProps {
   details: string;
+  setItemId: (id: string | undefined) => void;
 }
 
-export const Details: FC<DetailsProps> = ({ details }) => {
-  const navigate = useNavigate();
-
+export const Details: FC<DetailsProps> = ({ details, setItemId }) => {
   const closeDetails = () => {
-    navigate(`/`);
+    setItemId(undefined);
   };
 
   return (
-    <div>
-      <button onClick={closeDetails}>Close</button>
+    <div className="details-container">
+      Details:
       <div>
-        <p>{details}</p>
+        <p>id: {details}</p>
       </div>
+      <button onClick={closeDetails}>Close</button>
     </div>
   );
 };
