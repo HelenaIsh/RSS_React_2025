@@ -3,12 +3,13 @@ import { SearchForm } from './SearchForm';
 
 interface HeaderProps {
   setResults: (results: unknown) => void;
+  setTotalPages: (totalPages: number) => void;
 }
 
-export const Header: FC<HeaderProps> = ({ setResults }) => {
+export const Header: FC<HeaderProps> = (props) => {
   return (
     <header>
-      <SearchForm setResults={setResults} />
+      <SearchForm {...props} />
     </header>
   );
 };

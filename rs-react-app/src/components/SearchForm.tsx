@@ -1,39 +1,44 @@
-import React, { FC, useEffect, useState, useCallback } from 'react';
+import React, { FC, useEffect, useState } from 'react';
+import { useSearchParams } from 'react-router-dom';
 import { Spinner } from './Spinner';
 import { fetchResults } from '../services/fetchApi';
 import { useLocalStorage } from '../hooks/useLocalStorage';
 
 interface SearchFormProps {
   setResults: (results: unknown) => void;
+  setTotalPages: (totalPages: number) => void;
 }
 
-export const SearchForm: FC<SearchFormProps> = ({ setResults }) => {
+export const SearchForm: FC<SearchFormProps> = ({
+  setResults,
+  setTotalPages,
+}) => {
   const [name, setName] = useLocalStorage('search', 'animal');
   const [loading, setLoading] = useState(false);
+  const [searchParams] = useSearchParams();
 
-  const fetchData = useCallback(
-    async (query: string) => {
-      if (!query) return;
-      setLoading(true);
-      try {
-        const data = await fetchResults(query);
-        setResults(data[`${query}s`] || []);
-      } catch (err: unknown) {
-        setResults(
-          err instanceof Error ? err.message : 'An unknown error occurred'
-        );
-      } finally {
-        setLoading(false);
-      }
-    },
-    [setResults]
-  );
+  const fetchData = async (query: string) => {
+    if (!query) return;
+    setLoading(true);
+    try {
+      const page = searchParams.get('page') || '1';
+      const data = await fetchResults(query, page);
+      setResults(data[`${query}s`] || []);
+      setTotalPages(data.page.totalPages);
+    } catch (err: unknown) {
+      setResults(
+        err instanceof Error ? err.message : 'An unknown error occurred'
+      );
+    } finally {
+      setLoading(false);
+    }
+  };
 
   useEffect(() => {
     if (name) {
       fetchData(name);
     }
-  }, []);
+  }, [searchParams]);
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
