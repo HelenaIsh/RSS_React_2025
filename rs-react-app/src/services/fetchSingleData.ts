@@ -5,7 +5,6 @@
 
 export const fetchSingleData = async (id: string): Promise<unknown> => {
   const query = JSON.parse(localStorage.getItem('search') || 'animal');
-  console.log(`https://stapi.co/api/v1/rest/${query}?uid=${id}`);
 
   try {
     const response = await fetch(

@@ -1,42 +1,23 @@
-import { FC, useState } from 'react';
+import { FC } from 'react';
 
 import { ResultsRow } from './ResultsRow';
-import { fetchSingleData } from '../services/fetchSingleData';
-import { Spinner } from './Spinner';
+import { useNavigate, useSearchParams } from 'react-router-dom';
 
 interface ResultsProps {
   results: unknown;
   totalPages: string;
-  setItemId: (itemId: string | undefined) => void;
-  setDetails: (details: string | undefined) => void;
 }
 
-export const Results: FC<ResultsProps> = ({
-  results,
-  setItemId,
-  setDetails,
-}) => {
-  const [loading, setLoading] = useState(false);
-
-  const fetchData = async (id: string) => {
-    if (!id) return;
-    setLoading(true);
-    try {
-      const data = await fetchSingleData(id);
-      return JSON.stringify(data, null, 2);
-    } catch (err: unknown) {
-      return err instanceof Error ? err.message : 'An unknown error occurred';
-    } finally {
-      setLoading(false);
-    }
-  };
+export const Results: FC<ResultsProps> = ({ results }) => {
+  const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
 
   const handleRowClick = async (e: React.MouseEvent) => {
     const target = e.target as HTMLElement;
     const row = target.closest('.row');
+    const queryString = searchParams.toString();
     if (row) {
-      setItemId(row.id);
-      setDetails(await fetchData(row.id));
+      navigate(`/details/${row.id}?${queryString}`);
     }
   };
 
@@ -53,7 +34,6 @@ export const Results: FC<ResultsProps> = ({
           </div>
         </div>
       ) : null}
-      {loading && <Spinner />}
     </>
   );
 };
