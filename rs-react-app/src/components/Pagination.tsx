@@ -21,14 +21,14 @@ export const Pagination: FC<PaginationProps> = ({
     <div className="pagination">
       <button
         onClick={() => changePage(currentPage - 1)}
-        disabled={currentPage < 1}
+        disabled={+currentPage < 1}
       >
         Назад
       </button>
       <span> Страница {+currentPage} </span>
       <button
         onClick={() => changePage(currentPage + 1)}
-        disabled={currentPage >= +totalPages}
+        disabled={+currentPage >= +totalPages - 1}
       >
         Вперед
       </button>

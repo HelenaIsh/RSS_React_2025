@@ -11,8 +11,8 @@ interface MainProps {
 export const Main: FC<MainProps> = (props) => {
   const [searchParams] = useSearchParams();
 
-  let page = parseInt(searchParams.get('page') || '1');
-  if (+page > +props.totalPages) {
+  let page = parseInt(searchParams.get('page') || '0');
+  if (page > +props.totalPages) {
     page = +props.totalPages;
   }
 
