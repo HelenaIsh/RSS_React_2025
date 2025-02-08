@@ -1,8 +1,7 @@
-import { FC, useState } from 'react';
+import { FC } from 'react';
 import { Results } from './Results';
 import { Outlet, useSearchParams } from 'react-router-dom';
 import { Pagination } from './Pagination';
-import { Details } from './Details';
 
 interface MainProps {
   results: unknown;

@@ -13,6 +13,9 @@ export const Results: FC<ResultsProps> = ({ results }) => {
   const [searchParams] = useSearchParams();
 
   const handleRowClick = async (e: React.MouseEvent) => {
+    if (!location.pathname.startsWith('/details/')) {
+      e.stopPropagation();
+    }
     const target = e.target as HTMLElement;
     const row = target.closest('.row');
     const queryString = searchParams.toString();
@@ -21,12 +24,17 @@ export const Results: FC<ResultsProps> = ({ results }) => {
     }
   };
 
+  const closeDetails = () => {
+    const queryString = searchParams.toString();
+    navigate(`/?${queryString}`);
+  };
+
   return (
     <>
       {typeof results === 'string' ? (
         <p>{results}</p>
       ) : Array.isArray(results) ? (
-        <div className="results-table">
+        <div className="results-table" onClick={closeDetails}>
           <div onClick={handleRowClick}>
             {results.map((el) => {
               return <ResultsRow element={el} key={el.uid} id={el.uid} />;
