@@ -1,5 +1,5 @@
 import { FC } from 'react';
-import { Results } from './Results';
+import { CardList } from './CardList';
 import { Outlet, useSearchParams } from 'react-router-dom';
 import { Pagination } from './Pagination';
 
@@ -19,7 +19,7 @@ export const Main: FC<MainProps> = (props) => {
   return (
     <main>
       <div className="main-container">
-        <Results {...props} />
+        <CardList {...props} />
         {location.pathname.startsWith('/details/') && <Outlet />}
       </div>
       {Array.isArray(props.results) && props.results.length > 0 && (

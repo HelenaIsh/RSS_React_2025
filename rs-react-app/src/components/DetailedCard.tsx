@@ -4,7 +4,7 @@ import { useNavigate, useParams, useSearchParams } from 'react-router-dom';
 import { Spinner } from './Spinner';
 import { fetchSingleData } from '../services/fetchSingleData';
 
-export const Details: FC = () => {
+export const DetailedCard: FC = () => {
   const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
   const { id } = useParams();

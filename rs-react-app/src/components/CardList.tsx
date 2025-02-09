@@ -1,14 +1,14 @@
 import { FC } from 'react';
 
-import { ResultsRow } from './ResultsRow';
+import { Card } from './Card';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 
-interface ResultsProps {
+interface CardListProps {
   results: unknown;
   totalPages: string;
 }
 
-export const Results: FC<ResultsProps> = ({ results }) => {
+export const CardList: FC<CardListProps> = ({ results }) => {
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
 
@@ -33,15 +33,24 @@ export const Results: FC<ResultsProps> = ({ results }) => {
     <>
       {typeof results === 'string' ? (
         <p>{results}</p>
-      ) : Array.isArray(results) ? (
+      ) : Array.isArray(results) && results.length > 0 ? (
         <div className="results-table" onClick={closeDetails}>
           <div onClick={handleRowClick}>
             {results.map((el) => {
-              return <ResultsRow element={el} key={el.uid} id={el.uid} />;
+              return (
+                <Card
+                  element={el}
+                  key={el.uid}
+                  id={el.uid}
+                  data-testid="card"
+                />
+              );
             })}
           </div>
         </div>
-      ) : null}
+      ) : (
+        <p>No results found</p>
+      )}
     </>
   );
 };
