@@ -1,101 +1,81 @@
-import React from 'react';
+import React, { FC, useEffect, useState } from 'react';
+import { useSearchParams } from 'react-router-dom';
 import { Spinner } from './Spinner';
 import { fetchResults } from '../services/fetchApi';
+import { useLocalStorage } from '../hooks/useLocalStorage';
 
 interface SearchFormProps {
   setResults: (results: unknown) => void;
+  setTotalPages: (totalPages: string) => void;
 }
 
-interface SearchFormState {
-  name: string;
-  results: string[] | [];
-  loading: boolean;
-  error: string | null;
-}
+export const SearchForm: FC<SearchFormProps> = ({
+  setResults,
+  setTotalPages,
+}) => {
+  const [name, setName] = useLocalStorage('search', 'animal');
+  const [loading, setLoading] = useState(false);
+  const [searchParams] = useSearchParams();
 
-export class SearchForm extends React.Component<
-  SearchFormProps,
-  SearchFormState
-> {
-  constructor(props: SearchFormProps) {
-    super(props);
-    this.state = {
-      name: localStorage.getItem('search') || '',
-      results: [],
-      loading: false,
-      error: null,
-    };
-  }
-
-  async componentDidMount(): Promise<void> {
-    const name = localStorage.getItem('search') || '';
-    this.setState({ loading: true, name });
+  const fetchData = async (query: string) => {
+    if (!query) return;
+    setLoading(true);
     try {
-      const data = await fetchResults(name);
-      this.setState({ results: data || [] });
-      this.props.setResults(data[`${name}s`] || []);
-    } catch (err: unknown) {
-      if (err instanceof Error) {
-        this.setState({ error: err.message });
-        this.props.setResults(err.message);
-      } else {
-        this.setState({ error: 'An unknown error occurred' });
-        this.props.setResults('An unknown error occurred');
+      const page = searchParams.get('page') || '1';
+      let data = await fetchResults(query, page);
+      const totalPages = data.page.totalPages;
+      if (+page > +totalPages) {
+        data = await fetchResults(query, totalPages);
       }
+      setResults(data[`${query}s`] || []);
+      setTotalPages(data.page.totalPages);
+    } catch (err: unknown) {
+      setResults(
+        err instanceof Error ? err.message : 'An unknown error occurred'
+      );
     } finally {
-      this.setState({ loading: false });
+      setLoading(false);
     }
-  }
+  };
 
-  handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+  useEffect(() => {
+    if (name) {
+      fetchData(name);
+    }
+  }, [searchParams]);
+
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    const { name } = this.state;
-    if (!name) return;
-
-    this.setState({ loading: true, error: null });
-
-    try {
-      localStorage.setItem('search', name);
-      const data = await fetchResults(name);
-      this.setState({ results: data || [] });
-      this.props.setResults(data[`${name}s`] || []);
-    } catch (err: unknown) {
-      if (err instanceof Error) {
-        this.setState({ error: err.message });
-        this.props.setResults(err.message);
-      } else {
-        this.setState({ error: 'An unknown error occurred' });
-        this.props.setResults('An unknown error occurred');
-      }
-    } finally {
-      this.setState({ loading: false });
-    }
+    fetchData(name);
   };
 
-  private handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    this.setState({ name: e.target.value.trim() });
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setName(e.target.value.trim());
   };
 
-  render() {
-    return (
-      <>
-        <form onSubmit={this.handleSubmit} className="search-form">
-          <input
-            type="text"
-            value={this.state.name}
-            onChange={this.handleInputChange}
-            list="search"
-          />
-          <datalist id="search">
-            <option value="animal" />
-            <option value="astronomicalObject" />
-            <option value="book" />
-            <option value="character" />
-          </datalist>
-          <button type="submit">Search</button>
-        </form>
-        {this.state.loading && <Spinner />}
-      </>
-    );
-  }
-}
+  return (
+    <>
+      <form
+        onSubmit={handleSubmit}
+        className="search-form"
+        data-testid={'form'}
+      >
+        <input
+          type="text"
+          value={name}
+          onChange={handleInputChange}
+          list="search"
+          data-testid={'search-input'}
+        />
+        <datalist id="search">
+          <option value="animal" />
+          <option value="astronomicalObject" />
+          <option value="book" />
+          <option value="character" />
+        </datalist>
+        <button type="submit">Search</button>
+      </form>
+      {loading && <Spinner />}
+    </>
+  );
+};

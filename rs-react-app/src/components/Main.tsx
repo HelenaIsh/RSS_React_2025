@@ -1,16 +1,30 @@
-import React from 'react';
-import { Results } from './Results';
+import { FC } from 'react';
+import { CardList } from './CardList';
+import { Outlet, useSearchParams } from 'react-router-dom';
+import { Pagination } from './Pagination';
 
 interface MainProps {
   results: unknown;
+  totalPages: string;
 }
 
-export class Main extends React.Component<MainProps> {
-  render(): React.ReactNode {
-    return (
-      <main>
-        <Results results={this.props.results} />
-      </main>
-    );
+export const Main: FC<MainProps> = (props) => {
+  const [searchParams] = useSearchParams();
+
+  let page = parseInt(searchParams.get('page') || '0');
+  if (page > +props.totalPages) {
+    page = +props.totalPages;
   }
-}
+
+  return (
+    <main>
+      <div className="main-container">
+        <CardList {...props} />
+        {location.pathname.startsWith('/details/') && <Outlet />}
+      </div>
+      {Array.isArray(props.results) && props.results.length > 0 && (
+        <Pagination totalPages={props.totalPages} currentPage={page} />
+      )}
+    </main>
+  );
+};

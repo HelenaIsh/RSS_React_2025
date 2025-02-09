@@ -1,28 +1,21 @@
-import React from 'react';
-import './App.css';
-import { ErrorBoundary } from './components/ErrorBoundary';
-import { ErrorButton } from './components/ErrorButton';
-import { Header } from './components/Header';
-import { Main } from './components/Main';
+import { FC } from 'react';
+import { Routes, Route } from 'react-router-dom';
 
-export default class App extends React.Component<object, { results: unknown }> {
-  constructor(props: object) {
-    super(props);
-    this.state = {
-      results: undefined,
-    };
-  }
-  render() {
-    return (
-      <div className="app">
-        <ErrorBoundary
-          fallback={<h2>Something went wrong. Please try again later.</h2>}
-        >
-          <Header setResults={(results) => this.setState({ results })} />
-          <Main results={this.state.results} />
-          <ErrorButton />
-        </ErrorBoundary>
-      </div>
-    );
-  }
-}
+import './App.css';
+import { MainPage } from './pages/MainPage';
+import NotFoundPage from './pages/NotFoundPage';
+import { DetailedCard } from './components/DetailedCard';
+
+const App: FC = () => {
+  return (
+    <div className="app">
+      <Routes>
+        <Route path="/" element={<MainPage />}>
+          <Route path="details/:id" element={<DetailedCard />} />
+        </Route>
+        <Route path="*" element={<NotFoundPage />} />
+      </Routes>
+    </div>
+  );
+};
+export default App;

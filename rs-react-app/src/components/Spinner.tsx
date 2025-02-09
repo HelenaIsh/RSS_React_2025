@@ -1,11 +1,9 @@
-import React from 'react';
+import { FC } from 'react';
 
-export class Spinner extends React.PureComponent {
-  render(): React.ReactNode {
-    return (
-      <div className="spinner-overlay">
-        <div className="spinner"></div>
-      </div>
-    );
-  }
-}
+export const Spinner: FC = () => {
+  return (
+    <div className="spinner-overlay" data-testid={'spinner-overlay'}>
+      <div className="spinner" data-testid={'spinner'}></div>
+    </div>
+  );
+};

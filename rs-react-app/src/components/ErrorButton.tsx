@@ -1,29 +1,20 @@
-import React from 'react';
+import { FC, useState } from 'react';
 
-export class ErrorButton extends React.PureComponent<
-  object,
-  { hasError: boolean }
-> {
-  constructor(props: object) {
-    super(props);
-    this.state = {
-      hasError: false,
-    };
+export const ErrorButton: FC = () => {
+  const [hasError, setHasError] = useState(false);
+
+  if (hasError) {
+    throw new Error('test error');
   }
-  render(): React.ReactNode {
-    if (this.state.hasError) {
-      throw new Error('test error');
-    }
-    return (
-      <footer>
-        <button
-          onClick={() => {
-            this.setState({ hasError: true });
-          }}
-        >
-          Throw an error
-        </button>
-      </footer>
-    );
-  }
-}
+  return (
+    <footer>
+      <button
+        onClick={() => {
+          setHasError(true);
+        }}
+      >
+        Throw an error
+      </button>
+    </footer>
+  );
+};

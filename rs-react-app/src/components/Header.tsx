@@ -1,16 +1,15 @@
-import React from 'react';
+import { FC } from 'react';
 import { SearchForm } from './SearchForm';
 
-interface HeaderProps {
+export interface HeaderProps {
   setResults: (results: unknown) => void;
+  setTotalPages: (totalPages: string) => void;
 }
 
-export class Header extends React.Component<HeaderProps> {
-  render() {
-    return (
-      <header>
-        <SearchForm setResults={this.props.setResults} />
-      </header>
-    );
-  }
-}
+export const Header: FC<HeaderProps> = (props) => {
+  return (
+    <header>
+      <SearchForm {...props} />
+    </header>
+  );
+};
