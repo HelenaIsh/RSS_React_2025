@@ -1,7 +1,7 @@
 import { FC } from 'react';
 import { SearchForm } from './SearchForm';
 
-interface HeaderProps {
+export interface HeaderProps {
   setResults: (results: unknown) => void;
   setTotalPages: (totalPages: string) => void;
 }

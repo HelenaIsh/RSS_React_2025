@@ -55,12 +55,17 @@ export const SearchForm: FC<SearchFormProps> = ({
 
   return (
     <>
-      <form onSubmit={handleSubmit} className="search-form">
+      <form
+        onSubmit={handleSubmit}
+        className="search-form"
+        data-testid={'form'}
+      >
         <input
           type="text"
           value={name}
           onChange={handleInputChange}
           list="search"
+          data-testid={'search-input'}
         />
         <datalist id="search">
           <option value="animal" />
