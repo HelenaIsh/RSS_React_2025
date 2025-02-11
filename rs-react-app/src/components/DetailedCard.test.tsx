@@ -23,9 +23,9 @@ describe('DetailedCard', () => {
   beforeEach(() => {
     setSearchParamsMock.mockClear();
     navigateMock.mockClear();
-    (useNavigate as vi.Mock).mockReturnValue(navigateMock);
-    (useParams as vi.Mock).mockReturnValue({ id: '123' });
-    (useSearchParams as vi.Mock).mockReturnValue([
+    vi.mocked(useNavigate).mockReturnValue(navigateMock);
+    vi.mocked(useParams).mockReturnValue({ id: '123' });
+    vi.mocked(useSearchParams).mockReturnValue([
       new URLSearchParams(),
       setSearchParamsMock,
     ]);
