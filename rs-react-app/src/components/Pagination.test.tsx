@@ -18,7 +18,7 @@ describe('Pagination Component', () => {
   const mockSetSearchParams = vi.fn();
 
   beforeEach(() => {
-    (useSearchParams as vi.Mock).mockReturnValue([
+    vi.mocked(useSearchParams).mockReturnValue([
       new URLSearchParams(),
       mockSetSearchParams,
     ]);

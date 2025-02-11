@@ -42,7 +42,7 @@ describe('DetailedCard', () => {
       name: 'Test Data',
       description: 'Some details about the data',
     };
-    (fetchSingleData as vi.Mock).mockResolvedValue(mockData);
+    vi.mocked(fetchSingleData).mockResolvedValue(mockData);
 
     render(<DetailedCard />);
 
