@@ -3,6 +3,7 @@ import { useNavigate, useParams, useSearchParams } from 'react-router-dom';
 
 import { Spinner } from './Spinner';
 import { fetchSingleData } from '../services/fetchSingleData';
+import { useTheme } from '../context/ThemeContext';
 
 export const DetailedCard: FC = () => {
   const navigate = useNavigate();
@@ -10,6 +11,7 @@ export const DetailedCard: FC = () => {
   const { id } = useParams();
   const [data, setData] = useState<string | null>(null);
   const [searchParams] = useSearchParams();
+  const { theme } = useTheme();
 
   const fetchData = async () => {
     if (!id) return;
@@ -35,7 +37,14 @@ export const DetailedCard: FC = () => {
 
   return (
     <>
-      <div className="details-container">
+      <div
+        className={
+          'details-container ' +
+          (theme === 'light'
+            ? 'details-container--light'
+            : 'details-container--dark')
+        }
+      >
         Details:
         <div>{data}</div>
         <button onClick={closeDetails}>Close</button>

@@ -1,5 +1,6 @@
 import { FC } from 'react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
+import { useTheme } from '../context/ThemeContext';
 
 interface CardProps {
   element: unknown;
@@ -9,6 +10,7 @@ interface CardProps {
 export const Card: FC<CardProps> = ({ element, id }) => {
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
+  const { theme } = useTheme();
 
   let title = '';
   if (element && typeof element === 'object') {
@@ -33,7 +35,10 @@ export const Card: FC<CardProps> = ({ element, id }) => {
   };
 
   return (
-    <div className="row" id={id}>
+    <div
+      className={'row ' + (theme === 'light' ? 'row--light' : 'row--dark')}
+      id={id}
+    >
       <div className="row-name" onClick={handleCardClick}>
         {title}
       </div>

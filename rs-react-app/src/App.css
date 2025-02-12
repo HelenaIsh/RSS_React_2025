@@ -7,7 +7,7 @@ html {
   text-align: center;
   height: 100%;
   width: 100%;
-  margin: 20px 100px;
+  margin: 20px 50px;
 }
 
 .app {
@@ -15,6 +15,26 @@ html {
   width: 100%;
   display: flex;
   flex-direction: column;
+  padding: 0 50px;
+  box-sizing: border-box;
+}
+
+.dark {
+  background: #121212;
+  color: #e0e0e0;
+}
+
+.dark button {
+  background-color: #4db6ac;
+}
+
+.light {
+  background: #f5f5f5;
+  color: #333;
+}
+
+.light button {
+  background-color: #4a90e2;
 }
 
 header {
@@ -24,6 +44,7 @@ header {
   align-items: center;
   justify-content: center;
   flex-shrink: 0;
+  gap: 10px;
 }
 
 .search-form {
@@ -147,12 +168,19 @@ footer {
 }
 
 .details-container {
-  background: rgba(255, 255, 255, 0.4);
   height: fit-content;
   border-radius: 10px;
   padding: 10px;
   flex: 50% 0 0;
   max-width: 50%;
+}
+
+.details-container--light {
+  background: rgba(0, 0, 0, 0.4);
+}
+
+.details-container--dark {
+  background: rgba(255, 255, 255, 0.4);
 }
 
 .row {
@@ -162,5 +190,20 @@ footer {
 
 .row:hover {
   transform: scale(1.1);
-  color: rgb(120, 130, 186);
+}
+
+.row--light:hover {
+  color: #4a90e2;
+}
+
+.row--dark:hover {
+  color: #4db6ac;
+}
+
+.lightInput {
+  background-color: #cccccc;
+}
+
+.darkInput {
+  background-color: #333;
 }

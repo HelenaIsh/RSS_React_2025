@@ -3,6 +3,7 @@ import { useSearchParams } from 'react-router-dom';
 import { Spinner } from './Spinner';
 import { fetchResults } from '../services/fetchApi';
 import { useLocalStorage } from '../hooks/useLocalStorage';
+import { useTheme } from '../context/ThemeContext';
 
 interface SearchFormProps {
   setResults: (results: unknown) => void;
@@ -16,12 +17,13 @@ export const SearchForm: FC<SearchFormProps> = ({
   const [name, setName] = useLocalStorage('search', 'animal');
   const [loading, setLoading] = useState(false);
   const [searchParams] = useSearchParams();
+  const { theme } = useTheme();
 
   const fetchData = async (query: string) => {
     if (!query) return;
     setLoading(true);
     try {
-      const page = searchParams.get('page') || '1';
+      const page = searchParams.get('page') || '0';
       let data = await fetchResults(query, page);
       const totalPages = data.page.totalPages;
       if (+page > +totalPages) {
@@ -66,6 +68,7 @@ export const SearchForm: FC<SearchFormProps> = ({
           onChange={handleInputChange}
           list="search"
           data-testid={'search-input'}
+          className={theme === 'light' ? 'lightInput' : 'darkInput'}
         />
         <datalist id="search">
           <option value="animal" />
