@@ -6,7 +6,7 @@ import '@testing-library/jest-dom';
 import { useSearchParams } from 'react-router-dom';
 
 vi.mock('react-router-dom', async (importOriginal) => {
-  const actual = await importOriginal();
+  const actual = await importOriginal<typeof import('react-router-dom')>();
   return {
     ...actual,
     useSearchParams: vi.fn(),
@@ -18,7 +18,7 @@ describe('Pagination Component', () => {
   const mockSetSearchParams = vi.fn();
 
   beforeEach(() => {
-    (useSearchParams as vi.Mock).mockReturnValue([
+    vi.mocked(useSearchParams).mockReturnValue([
       new URLSearchParams(),
       mockSetSearchParams,
     ]);
