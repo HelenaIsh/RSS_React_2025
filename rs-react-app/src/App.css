@@ -188,10 +188,6 @@ footer {
   transition: 0.3s ease-out;
 }
 
-.row:hover {
-  transform: scale(1.1);
-}
-
 .row--light:hover {
   color: #4a90e2;
 }
@@ -206,4 +202,17 @@ footer {
 
 .darkInput {
   background-color: #333;
+}
+
+input[type='checkbox'] {
+  appearance: none;
+  width: 20px;
+  height: 20px;
+  border: 2px solid gray;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+input[type='checkbox']:checked {
+  background-color: green;
 }
