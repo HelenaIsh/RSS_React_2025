@@ -33,6 +33,10 @@ html {
   color: #333;
 }
 
+.light ::selection {
+  background-color: #99c8ff;
+}
+
 .light button {
   background-color: #4a90e2;
 }

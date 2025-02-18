@@ -25,7 +25,10 @@ export const Pagination: FC<PaginationProps> = ({
       >
         Back
       </button>
-      <span> Page {+currentPage} </span>
+      <span>
+        {' '}
+        Page {+currentPage} / {+totalPages - 1}{' '}
+      </span>
       <button
         onClick={() => changePage(currentPage + 1)}
         disabled={+currentPage >= +totalPages - 1}

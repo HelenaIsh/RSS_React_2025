@@ -5,7 +5,7 @@ interface CheckPayload {
   checked: boolean;
 }
 
-const initialState: { selectedIds: string[]; itemDetails: any[] } = {
+const initialState: { selectedIds: string[]; itemDetails: unknown[] } = {
   selectedIds: [],
   itemDetails: [],
 };
@@ -21,7 +21,7 @@ export const fetchItemDetails = createAsyncThunk(
       );
       const responses = await Promise.all(fetchRequests);
       return responses;
-    } catch (error) {
+    } catch {
       return rejectWithValue('Failed to fetch item details.');
     }
   }

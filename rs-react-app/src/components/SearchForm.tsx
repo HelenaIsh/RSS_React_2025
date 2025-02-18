@@ -4,6 +4,8 @@ import { Spinner } from './Spinner';
 import { fetchResults } from '../services/fetchApi';
 import { useLocalStorage } from '../hooks/useLocalStorage';
 import { useTheme } from '../context/ThemeContext';
+import { useDispatch } from 'react-redux';
+import { deleteChecks } from '../../features/check';
 
 interface SearchFormProps {
   setResults: (results: unknown) => void;
@@ -18,18 +20,16 @@ export const SearchForm: FC<SearchFormProps> = ({
   const [loading, setLoading] = useState(false);
   const [searchParams] = useSearchParams();
   const { theme } = useTheme();
+  const [, setSearchParams] = useSearchParams();
+  const dispatch = useDispatch();
 
   const fetchData = async (query: string) => {
     if (!query) return;
     setLoading(true);
     try {
       const page = searchParams.get('page') || '0';
-      let data = await fetchResults(query, page);
-      const totalPages = data.page.totalPages;
-      if (+page > +totalPages) {
-        data = await fetchResults(query, totalPages);
-      }
-      setResults(data[`${query}s`] || []);
+      const data = await fetchResults(query, page);
+      setResults(data['animals'] || []);
       setTotalPages(data.page.totalPages);
     } catch (err: unknown) {
       setResults(
@@ -48,6 +48,8 @@ export const SearchForm: FC<SearchFormProps> = ({
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    setSearchParams({});
+    dispatch(deleteChecks());
     fetchData(name);
   };
 
@@ -66,16 +68,10 @@ export const SearchForm: FC<SearchFormProps> = ({
           type="text"
           value={name}
           onChange={handleInputChange}
-          list="search"
           data-testid={'search-input'}
           className={theme === 'light' ? 'lightInput' : 'darkInput'}
+          placeholder={`enter animal's name or just letter a`}
         />
-        <datalist id="search">
-          <option value="animal" />
-          <option value="astronomicalObject" />
-          <option value="book" />
-          <option value="character" />
-        </datalist>
         <button type="submit">Search</button>
       </form>
       {loading && <Spinner />}

@@ -17,7 +17,7 @@ export const Flayout: FC = () => {
     dispatch(deleteChecks());
   };
 
-  const convertToCSV = (items: any[]) => {
+  const convertToCSV = (items: string[]) => {
     if (items.length === 0) return '';
 
     const headers = Object.keys(items[0]).join(',') + '\n';
