@@ -3,6 +3,9 @@ import checkReducer from '../features/check';
 
 export const store = configureStore({
   reducer: {
-    check: checkReducer,
+    checks: checkReducer,
   },
 });
+
+export type RootState = ReturnType<typeof store.getState>;
+export type AppDispatch = typeof store.dispatch;

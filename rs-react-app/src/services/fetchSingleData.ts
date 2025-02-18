@@ -1,8 +1,3 @@
-// interface ApiResponse {
-//     page: { totalPages: string };
-//     [key: string]: unknown[] | { totalPages: string };
-//   }
-
 export const fetchSingleData = async (id: string): Promise<unknown> => {
   const query = JSON.parse(localStorage.getItem('search') || 'animal');
 
