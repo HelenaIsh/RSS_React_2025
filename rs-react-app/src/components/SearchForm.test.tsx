@@ -1,8 +1,8 @@
-import { render, screen, waitFor } from '@testing-library/react';
+import { screen, waitFor } from '@testing-library/react';
 import { SearchForm } from './SearchForm';
 import '@testing-library/jest-dom';
 import { vi, expect, test, describe, beforeEach } from 'vitest';
-import { BrowserRouter } from 'react-router-dom';
+import { customRender } from './customRender';
 
 vi.mock('../services/fetchApi');
 vi.mock('../hooks/useLocalStorage', () => ({
@@ -18,13 +18,11 @@ describe('SearchForm Component', () => {
   });
 
   test('renders correctly with default search input', async () => {
-    render(
-      <BrowserRouter>
-        <SearchForm
-          setResults={setResultsMock}
-          setTotalPages={setTotalPagesMock}
-        />
-      </BrowserRouter>
+    customRender(
+      <SearchForm
+        setResults={setResultsMock}
+        setTotalPages={setTotalPagesMock}
+      />
     );
 
     await waitFor(() => expect(screen.getByTestId('form')).toBeInTheDocument());

@@ -5,7 +5,7 @@ interface CheckPayload {
   checked: boolean;
 }
 
-const initialState: { selectedIds: string[]; itemDetails: unknown[] } = {
+export const initialState: { selectedIds: string[]; itemDetails: unknown[] } = {
   selectedIds: [],
   itemDetails: [],
 };

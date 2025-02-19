@@ -1,7 +1,8 @@
-import { render, screen, fireEvent } from '@testing-library/react';
+import { screen, fireEvent } from '@testing-library/react';
 import { Header, HeaderProps } from './Header';
 import { vi, expect, test, describe } from 'vitest';
 import '@testing-library/jest-dom';
+import { customRender } from './customRender';
 
 vi.mock('./SearchForm', () => ({
   SearchForm: ({ setResults, setTotalPages }: HeaderProps) => (
@@ -17,7 +18,9 @@ describe('Header Component', () => {
     const setResults = vi.fn();
     const setTotalPages = vi.fn();
 
-    render(<Header setResults={setResults} setTotalPages={setTotalPages} />);
+    customRender(
+      <Header setResults={setResults} setTotalPages={setTotalPages} />
+    );
 
     expect(screen.getByText('Search')).toBeInTheDocument();
     expect(screen.getByText('Set Pages')).toBeInTheDocument();
@@ -27,7 +30,9 @@ describe('Header Component', () => {
     const setResults = vi.fn();
     const setTotalPages = vi.fn();
 
-    render(<Header setResults={setResults} setTotalPages={setTotalPages} />);
+    customRender(
+      <Header setResults={setResults} setTotalPages={setTotalPages} />
+    );
 
     fireEvent.click(screen.getByText('Search'));
     expect(setResults).toHaveBeenCalledWith('new results'); // This should match the value passed

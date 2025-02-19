@@ -33,34 +33,32 @@ export const Flayout: FC = () => {
   };
 
   async function saveFile() {
-    if ('showSaveFilePicker' in window) {
-      try {
-        const fileName = `${checkedItems.length}_items.csv`;
+    try {
+      const fileName = `${checkedItems.length}_items.csv`;
 
-        const itemDetails = await dispatch(
-          fetchItemDetails(checkedItems)
-        ).unwrap();
+      const itemDetails = await dispatch(
+        fetchItemDetails(checkedItems)
+      ).unwrap();
 
-        const csvContent = convertToCSV(itemDetails);
+      const csvContent = convertToCSV(itemDetails);
 
-        const fileHandle = await window.showSaveFilePicker({
-          suggestedName: fileName,
-          types: [
-            {
-              description: 'CSV File',
-              accept: { 'text/csv': ['.csv'] },
-            },
-          ],
-        });
+      const fileHandle = await window.showSaveFilePicker({
+        suggestedName: fileName,
+        types: [
+          {
+            description: 'CSV File',
+            accept: { 'text/csv': ['.csv'] },
+          },
+        ],
+      });
 
-        const writable = await fileHandle.createWritable();
-        await writable.write(csvContent);
-        await writable.close();
+      const writable = await fileHandle.createWritable();
+      await writable.write(csvContent);
+      await writable.close();
 
-        console.log(`File saved as ${fileName}`);
-      } catch (error) {
-        console.error('File saving failed:', error);
-      }
+      console.log(`File saved as ${fileName}`);
+    } catch (error) {
+      console.error('File saving failed:', error);
     }
   }
 
@@ -69,7 +67,10 @@ export const Flayout: FC = () => {
   };
 
   return (
-    <div className={'flayout ' + (theme === 'light' ? 'light' : 'dark')}>
+    <div
+      className={'flayout ' + (theme === 'light' ? 'light' : 'dark')}
+      data-testid="flayout"
+    >
       <div>{checkedItems.length} items selected</div>
       <button onClick={unselectAll}>Unselect All</button>
       <button onClick={handleDownload}>Download</button>

@@ -4,6 +4,7 @@ import { useNavigate, useParams, useSearchParams } from 'react-router-dom';
 import '@testing-library/jest-dom';
 import { vi, expect, test, describe, beforeEach } from 'vitest';
 import { fetchSingleData } from '../services/fetchSingleData';
+import { ThemeProvider } from '../context/ThemeContext';
 
 vi.mock('react-router-dom', () => ({
   ...vi.importActual('react-router-dom'),
@@ -32,7 +33,11 @@ describe('DetailedCard', () => {
   });
 
   test('should display a loading spinner initially', () => {
-    render(<DetailedCard />);
+    render(
+      <ThemeProvider>
+        <DetailedCard />
+      </ThemeProvider>
+    );
 
     expect(screen.getByTestId('spinner')).toBeInTheDocument();
   });
@@ -44,7 +49,11 @@ describe('DetailedCard', () => {
     };
     vi.mocked(fetchSingleData).mockResolvedValue(mockData);
 
-    render(<DetailedCard />);
+    render(
+      <ThemeProvider>
+        <DetailedCard />
+      </ThemeProvider>
+    );
 
     const nameElement = await screen.findByText((content) =>
       content.includes('Test Data')

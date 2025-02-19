@@ -1,8 +1,8 @@
-import { render, screen } from '@testing-library/react';
+import { screen } from '@testing-library/react';
 import { Main } from './Main';
 import { vi, expect, test, describe } from 'vitest';
-import { BrowserRouter } from 'react-router-dom';
 import '@testing-library/jest-dom';
+import { customRender } from './customRender';
 
 vi.mock('./CardList', () => ({
   CardList: ({ results }: { results: unknown }) => (
@@ -31,22 +31,14 @@ describe('Main Component', () => {
     }));
     const totalPages = '3';
 
-    render(
-      <BrowserRouter>
-        <Main results={mockResults} totalPages={totalPages} />
-      </BrowserRouter>
-    );
+    customRender(<Main results={mockResults} totalPages={totalPages} />);
 
     expect(screen.getByText('5 Cards Rendered')).toBeInTheDocument();
     expect(screen.getByText('Pagination: 0 / 3')).toBeInTheDocument();
   });
 
   test('does not render Pagination when there are no results', () => {
-    render(
-      <BrowserRouter>
-        <Main results={[]} totalPages="3" />
-      </BrowserRouter>
-    );
+    customRender(<Main results={[]} totalPages="3" />);
 
     expect(screen.queryByText('Pagination:')).not.toBeInTheDocument();
   });
@@ -58,11 +50,7 @@ describe('Main Component', () => {
 
     window.history.pushState({}, '', '?page=2');
 
-    render(
-      <BrowserRouter>
-        <Main results={mockResults} totalPages="3" />
-      </BrowserRouter>
-    );
+    customRender(<Main results={mockResults} totalPages="3" />);
 
     expect(screen.getByText('Pagination: 2 / 3')).toBeInTheDocument();
   });
@@ -74,11 +62,7 @@ describe('Main Component', () => {
 
     window.history.pushState({}, '', '?page=5');
 
-    render(
-      <BrowserRouter>
-        <Main results={mockResults} totalPages="3" />
-      </BrowserRouter>
-    );
+    customRender(<Main results={mockResults} totalPages="3" />);
 
     expect(screen.getByText('Pagination: 3 / 3')).toBeInTheDocument();
   });
@@ -88,11 +72,7 @@ describe('Main Component', () => {
       uid: `id-${i + 1}`,
     }));
 
-    render(
-      <BrowserRouter>
-        <Main results={mockResults} totalPages="3" />
-      </BrowserRouter>
-    );
+    customRender(<Main results={mockResults} totalPages="3" />);
 
     expect(screen.queryByText('Outlet')).not.toBeInTheDocument();
   });
