@@ -29,6 +29,12 @@ describe('Flayout Component', () => {
   beforeEach(() => {
     store = mockStore({
       checks: { selectedIds: ['item1', 'item2'], itemDetails: [] },
+      results: {
+        results: undefined,
+        totalPages: 0,
+        loading: false,
+        error: null,
+      },
     } as RootState);
     store.dispatch = vi.fn((action) =>
       typeof action === 'function'

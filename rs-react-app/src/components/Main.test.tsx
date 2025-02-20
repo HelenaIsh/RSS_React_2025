@@ -1,79 +1,149 @@
-import { screen } from '@testing-library/react';
+import { render, screen } from '@testing-library/react';
+import { Provider } from 'react-redux';
+import configureStore, { MockStoreEnhanced } from 'redux-mock-store';
 import { Main } from './Main';
-import { vi, expect, test, describe } from 'vitest';
+import { vi, describe, test, expect, beforeEach } from 'vitest';
+import { ThemeContext } from '../context/ThemeContext';
+import { AppDispatch, RootState } from '../../app/store';
+import { MemoryRouter, Route, Routes, useSearchParams } from 'react-router-dom';
 import '@testing-library/jest-dom';
-import { customRender } from './customRender';
 
-vi.mock('./CardList', () => ({
-  CardList: ({ results }: { results: unknown }) => (
-    <div>{Array.isArray(results) ? results.length : 0} Cards Rendered</div>
-  ),
-}));
+const mockStore = configureStore<RootState, AppDispatch>([]);
 
-vi.mock('./Pagination', () => ({
-  Pagination: ({
-    totalPages,
-    currentPage,
-  }: {
-    totalPages: string;
-    currentPage: number;
-  }) => (
-    <div>
-      Pagination: {currentPage} / {totalPages}
-    </div>
-  ),
-}));
+vi.mock('react-router-dom', async () => {
+  const actual = await vi.importActual('react-router-dom');
+  return {
+    ...actual,
+    useSearchParams: vi.fn(),
+  };
+});
 
 describe('Main Component', () => {
-  test('renders CardList and Pagination when results are passed', () => {
-    const mockResults = Array.from({ length: 5 }, (_, i) => ({
-      uid: `id-${i + 1}`,
-    }));
-    const totalPages = '3';
+  let store: MockStoreEnhanced<RootState, AppDispatch>;
 
-    customRender(<Main results={mockResults} totalPages={totalPages} />);
-
-    expect(screen.getByText('5 Cards Rendered')).toBeInTheDocument();
-    expect(screen.getByText('Pagination: 0 / 3')).toBeInTheDocument();
+  beforeEach(() => {
+    store = mockStore({
+      checks: { selectedIds: ['ANMA0000044745'], itemDetails: [] },
+      results: {
+        results: [
+          {
+            uid: 'ANMA0000044745',
+            name: 'Ghergher beast',
+            earthAnimal: false,
+            earthInsect: false,
+            avian: false,
+            canine: false,
+            feline: false,
+          },
+        ],
+        totalPages: 5,
+        loading: false,
+        error: null,
+      },
+    } as RootState);
+    store.dispatch = vi.fn((action) =>
+      typeof action === 'function'
+        ? action(store.dispatch, store.getState)
+        : action
+    );
   });
 
-  test('does not render Pagination when there are no results', () => {
-    customRender(<Main results={[]} totalPages="3" />);
+  test('renders correctly with results and pagination', () => {
+    const mockSearchParams = new URLSearchParams('page=1');
+    const mockSetSearchParams = vi.fn();
+    vi.mocked(useSearchParams).mockReturnValue([
+      mockSearchParams,
+      mockSetSearchParams,
+    ]);
 
-    expect(screen.queryByText('Pagination:')).not.toBeInTheDocument();
+    render(
+      <Provider store={store}>
+        <ThemeContext.Provider value={{ theme: 'light' }}>
+          <MemoryRouter>
+            <Main />
+          </MemoryRouter>
+        </ThemeContext.Provider>
+      </Provider>
+    );
+
+    expect(screen.getByTestId('card-list')).toBeInTheDocument();
   });
 
-  test('calculates page correctly from searchParams', () => {
-    const mockResults = Array.from({ length: 5 }, (_, i) => ({
-      uid: `id-${i + 1}`,
-    }));
+  test('renders Flayout when items are checked', () => {
+    const mockSearchParams = new URLSearchParams('page=1');
+    const mockSetSearchParams = vi.fn();
+    vi.mocked(useSearchParams).mockReturnValue([
+      mockSearchParams,
+      mockSetSearchParams,
+    ]);
 
-    window.history.pushState({}, '', '?page=2');
+    render(
+      <Provider store={store}>
+        <ThemeContext.Provider value={{ theme: 'light' }}>
+          <MemoryRouter>
+            <Main />
+          </MemoryRouter>
+        </ThemeContext.Provider>
+      </Provider>
+    );
 
-    customRender(<Main results={mockResults} totalPages="3" />);
-
-    expect(screen.getByText('Pagination: 2 / 3')).toBeInTheDocument();
+    expect(screen.getByTestId('flayout')).toBeInTheDocument();
   });
 
-  test('limits page to totalPages if page > totalPages', () => {
-    const mockResults = Array.from({ length: 5 }, (_, i) => ({
-      uid: `id-${i + 1}`,
-    }));
+  test('renders Outlet when on details page', () => {
+    const mockSearchParams = new URLSearchParams('page=1');
+    const mockSetSearchParams = vi.fn();
+    vi.mocked(useSearchParams).mockReturnValue([
+      mockSearchParams,
+      mockSetSearchParams,
+    ]);
 
-    window.history.pushState({}, '', '?page=5');
+    render(
+      <Provider store={store}>
+        <ThemeContext.Provider value={{ theme: 'light' }}>
+          <MemoryRouter initialEntries={['/details/123']}>
+            <Routes>
+              <Route
+                path="/details/:id"
+                element={<div data-testid="outlet">Outlet</div>}
+              />
+              <Route path="/" element={<Main />} />
+            </Routes>
+          </MemoryRouter>
+        </ThemeContext.Provider>
+      </Provider>
+    );
 
-    customRender(<Main results={mockResults} totalPages="3" />);
-
-    expect(screen.getByText('Pagination: 3 / 3')).toBeInTheDocument();
+    expect(screen.getByTestId('outlet')).toBeInTheDocument();
   });
 
-  test('does not render Outlet when path is not /details/', () => {
-    const mockResults = Array.from({ length: 5 }, (_, i) => ({
-      uid: `id-${i + 1}`,
-    }));
+  test('does not render Pagination when results are empty', () => {
+    store = mockStore({
+      checks: { selectedIds: [], itemDetails: [] },
+      results: {
+        results: [],
+        totalPages: 0,
+        loading: false,
+        error: null,
+      },
+    } as RootState);
 
-    customRender(<Main results={mockResults} totalPages="3" />);
+    const mockSearchParams = new URLSearchParams('page=1');
+    const mockSetSearchParams = vi.fn();
+    vi.mocked(useSearchParams).mockReturnValue([
+      mockSearchParams,
+      mockSetSearchParams,
+    ]);
+    render(
+      <Provider store={store}>
+        <ThemeContext.Provider value={{ theme: 'light' }}>
+          <MemoryRouter>
+            <Main />
+          </MemoryRouter>
+        </ThemeContext.Provider>
+      </Provider>
+    );
 
-    expect(screen.queryByText('Outlet')).not.toBeInTheDocument();
+    expect(screen.queryByTestId('pagination')).not.toBeInTheDocument();
   });
 });

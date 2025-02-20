@@ -1,18 +1,17 @@
 import { FC } from 'react';
 import { Card } from './Card';
+import { useSelector } from 'react-redux';
+import { RootState } from '../../app/store';
 
-interface CardListProps {
-  results: unknown;
-  totalPages: string;
-}
+export const CardList: FC = () => {
+  const { results } = useSelector((state: RootState) => state.results);
 
-export const CardList: FC<CardListProps> = ({ results }) => {
   return (
     <>
       {typeof results === 'string' ? (
-        <p>{results}</p>
+        <p data-testid="card-list">{results}</p>
       ) : Array.isArray(results) && results.length > 0 ? (
-        <div className="results-table">
+        <div className="results-table" data-testid="card-list">
           {results.map((el) => {
             return (
               <Card element={el} key={el.uid} id={el.uid} data-testid="card" />
@@ -20,7 +19,7 @@ export const CardList: FC<CardListProps> = ({ results }) => {
           })}
         </div>
       ) : (
-        <p>No results found</p>
+        <p data-testid="card-list">No results found</p>
       )}
     </>
   );

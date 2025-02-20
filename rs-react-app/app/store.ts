@@ -1,9 +1,11 @@
 import { configureStore } from '@reduxjs/toolkit';
 import checkReducer from '../features/check';
+import resultsReducer from '../features/results';
 
 export const store = configureStore({
   reducer: {
     checks: checkReducer,
+    results: resultsReducer,
   },
 });
 

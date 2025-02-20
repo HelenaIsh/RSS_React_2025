@@ -1,56 +1,31 @@
-import React, { FC, useEffect, useState } from 'react';
+import React, { FC, useEffect } from 'react';
 import { useSearchParams } from 'react-router-dom';
 import { Spinner } from './Spinner';
-import { fetchResults } from '../services/fetchApi';
 import { useLocalStorage } from '../hooks/useLocalStorage';
 import { useTheme } from '../context/ThemeContext';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { deleteChecks } from '../../features/check';
+import { AppDispatch, RootState } from '../../app/store';
+import { fetchData } from '../../features/results';
 
-interface SearchFormProps {
-  setResults: (results: unknown) => void;
-  setTotalPages: (totalPages: string) => void;
-}
-
-export const SearchForm: FC<SearchFormProps> = ({
-  setResults,
-  setTotalPages,
-}) => {
+export const SearchForm: FC = () => {
+  const dispatch = useDispatch<AppDispatch>();
+  const { loading } = useSelector((state: RootState) => state.results);
   const [name, setName] = useLocalStorage('search', 'animal');
-  const [loading, setLoading] = useState(false);
   const [searchParams] = useSearchParams();
   const { theme } = useTheme();
   const [, setSearchParams] = useSearchParams();
-  const dispatch = useDispatch();
-
-  const fetchData = async (query: string) => {
-    if (!query) return;
-    setLoading(true);
-    try {
-      const page = searchParams.get('page') || '0';
-      const data = await fetchResults(query, page);
-      setResults(data['animals'] || []);
-      setTotalPages(data.page.totalPages);
-    } catch (err: unknown) {
-      setResults(
-        err instanceof Error ? err.message : 'An unknown error occurred'
-      );
-    } finally {
-      setLoading(false);
-    }
-  };
+  const page = searchParams.get('page') || '0';
 
   useEffect(() => {
-    if (name) {
-      fetchData(name);
-    }
+    dispatch(fetchData({ name, page })).unwrap();
   }, [searchParams]);
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setSearchParams({});
     dispatch(deleteChecks());
-    fetchData(name);
+    dispatch(fetchData({ name, page: '0' })).unwrap();
   };
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
