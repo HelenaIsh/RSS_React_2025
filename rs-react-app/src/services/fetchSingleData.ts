@@ -1,14 +1,7 @@
-// interface ApiResponse {
-//     page: { totalPages: string };
-//     [key: string]: unknown[] | { totalPages: string };
-//   }
-
 export const fetchSingleData = async (id: string): Promise<unknown> => {
-  const query = JSON.parse(localStorage.getItem('search') || 'animal');
-
   try {
     const response = await fetch(
-      `https://stapi.co/api/v1/rest/${query}?uid=${id}`
+      `https://stapi.co/api/v1/rest/animal?uid=${id}`
     );
     if (!response.ok) {
       throw new Error('Failed to fetch data');

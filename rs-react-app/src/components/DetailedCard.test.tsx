@@ -4,6 +4,7 @@ import { useNavigate, useParams, useSearchParams } from 'react-router-dom';
 import '@testing-library/jest-dom';
 import { vi, expect, test, describe, beforeEach } from 'vitest';
 import { fetchSingleData } from '../services/fetchSingleData';
+import { ThemeProvider } from '../context/ThemeContext';
 
 vi.mock('react-router-dom', () => ({
   ...vi.importActual('react-router-dom'),
@@ -23,16 +24,20 @@ describe('DetailedCard', () => {
   beforeEach(() => {
     setSearchParamsMock.mockClear();
     navigateMock.mockClear();
-    (useNavigate as vi.Mock).mockReturnValue(navigateMock);
-    (useParams as vi.Mock).mockReturnValue({ id: '123' });
-    (useSearchParams as vi.Mock).mockReturnValue([
+    vi.mocked(useNavigate).mockReturnValue(navigateMock);
+    vi.mocked(useParams).mockReturnValue({ id: '123' });
+    vi.mocked(useSearchParams).mockReturnValue([
       new URLSearchParams(),
       setSearchParamsMock,
     ]);
   });
 
   test('should display a loading spinner initially', () => {
-    render(<DetailedCard />);
+    render(
+      <ThemeProvider>
+        <DetailedCard />
+      </ThemeProvider>
+    );
 
     expect(screen.getByTestId('spinner')).toBeInTheDocument();
   });
@@ -42,9 +47,13 @@ describe('DetailedCard', () => {
       name: 'Test Data',
       description: 'Some details about the data',
     };
-    (fetchSingleData as vi.Mock).mockResolvedValue(mockData);
+    vi.mocked(fetchSingleData).mockResolvedValue(mockData);
 
-    render(<DetailedCard />);
+    render(
+      <ThemeProvider>
+        <DetailedCard />
+      </ThemeProvider>
+    );
 
     const nameElement = await screen.findByText((content) =>
       content.includes('Test Data')

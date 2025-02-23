@@ -1,5 +1,8 @@
 import { FC } from 'react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
+import { useTheme } from '../context/ThemeContext';
+import { useDispatch, useSelector } from 'react-redux';
+import { addCheck, selectAllChecks } from '../../features/check';
 
 interface CardProps {
   element: unknown;
@@ -9,6 +12,8 @@ interface CardProps {
 export const Card: FC<CardProps> = ({ element, id }) => {
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
+  const { theme } = useTheme();
+  const dispatch = useDispatch();
 
   let title = '';
   if (element && typeof element === 'object') {
@@ -32,8 +37,25 @@ export const Card: FC<CardProps> = ({ element, id }) => {
     }
   };
 
+  const handleCheckClick = (e: React.ChangeEvent<HTMLInputElement>) => {
+    dispatch(addCheck({ id, checked: e.target.checked }));
+  };
+
+  const checkedItems = useSelector(selectAllChecks);
+  const isChecked = checkedItems.includes(id);
+
   return (
-    <div className="row" id={id}>
+    <div
+      className={'row ' + (theme === 'light' ? 'row--light' : 'row--dark')}
+      id={id}
+    >
+      <input
+        type="checkbox"
+        id={`checkbox-${id}`}
+        onChange={handleCheckClick}
+        className={theme === 'light' ? 'lightInput' : 'darkInput'}
+        checked={isChecked}
+      />
       <div className="row-name" onClick={handleCardClick}>
         {title}
       </div>

@@ -3,6 +3,9 @@ import { BrowserRouter } from 'react-router-dom';
 import { vi, expect, test, describe } from 'vitest';
 import { CardList } from './CardList';
 import '@testing-library/jest-dom';
+import configureStore, { MockStoreEnhanced } from 'redux-mock-store';
+import { AppDispatch, RootState } from '../../app/store';
+import { Provider } from 'react-redux';
 
 vi.mock('./Card', () => ({
   Card: ({ element }: { element: { uid: string } }) => (
@@ -10,26 +13,59 @@ vi.mock('./Card', () => ({
   ),
 }));
 
+const mockStore = configureStore<RootState, AppDispatch>([]);
+
 describe('CardList Component', () => {
+  let store: MockStoreEnhanced<RootState, AppDispatch>;
+
   test('renders the correct number of cards', () => {
-    const mockResults = Array.from({ length: 20 }, (_, i) => ({
-      uid: `id-${i + 1}`,
-    }));
+    store = mockStore({
+      checks: { selectedIds: ['ANMA0000044745'], itemDetails: [] },
+      results: {
+        results: [
+          {
+            uid: 'ANMA0000044745',
+            name: 'Ghergher beast',
+            earthAnimal: false,
+            earthInsect: false,
+            avian: false,
+            canine: false,
+            feline: false,
+          },
+        ],
+        totalPages: 5,
+        loading: false,
+        error: null,
+      },
+    } as RootState);
 
     render(
       <BrowserRouter>
-        <CardList results={mockResults} totalPages="1" />
+        <Provider store={store}>
+          <CardList />
+        </Provider>
       </BrowserRouter>
     );
 
     const cards = screen.getAllByTestId('card');
-    expect(cards).toHaveLength(20);
+    expect(cards).toHaveLength(1);
   });
 
   test('displays a message when there are no cards', () => {
+    store = mockStore({
+      checks: { selectedIds: [], itemDetails: [] },
+      results: {
+        results: null,
+        totalPages: 5,
+        loading: false,
+        error: null,
+      },
+    } as RootState);
     render(
       <BrowserRouter>
-        <CardList results={null} totalPages="1" />
+        <Provider store={store}>
+          <CardList />
+        </Provider>
       </BrowserRouter>
     );
 
@@ -37,9 +73,20 @@ describe('CardList Component', () => {
   });
 
   test('displays error message', () => {
+    store = mockStore({
+      checks: { selectedIds: [], itemDetails: [] },
+      results: {
+        results: 'error message',
+        totalPages: 5,
+        loading: false,
+        error: null,
+      },
+    } as RootState);
     render(
       <BrowserRouter>
-        <CardList results={'error message'} totalPages="1" />
+        <Provider store={store}>
+          <CardList />
+        </Provider>
       </BrowserRouter>
     );
 
@@ -47,9 +94,20 @@ describe('CardList Component', () => {
   });
 
   test("displays 'No results found' when no results are passed", () => {
+    store = mockStore({
+      checks: { selectedIds: [], itemDetails: [] },
+      results: {
+        results: [],
+        totalPages: 5,
+        loading: false,
+        error: null,
+      },
+    } as RootState);
     render(
       <BrowserRouter>
-        <CardList results={[]} totalPages="1" />
+        <Provider store={store}>
+          <CardList />
+        </Provider>
       </BrowserRouter>
     );
     expect(screen.getByText('No results found')).toBeInTheDocument();
