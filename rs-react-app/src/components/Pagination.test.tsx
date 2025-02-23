@@ -31,7 +31,7 @@ describe('Pagination Component', () => {
       </BrowserRouter>
     );
 
-    const forwardButton = screen.getByText('Вперед');
+    const forwardButton = screen.getByText('Forward');
     fireEvent.click(forwardButton);
 
     expect(mockSetSearchParams).toHaveBeenCalledWith({ page: '3' });

@@ -1,9 +1,9 @@
-import { render, screen, fireEvent } from '@testing-library/react';
-import { BrowserRouter } from 'react-router-dom';
+import { screen, fireEvent } from '@testing-library/react';
 import { vi, expect, test, describe } from 'vitest';
 import { Card } from './Card';
 import '@testing-library/jest-dom';
 import { useNavigate, useSearchParams } from 'react-router-dom';
+import { customRender } from './customRender';
 
 vi.mock('react-router-dom', async (importOriginal) => {
   const actual = await importOriginal<typeof import('react-router-dom')>();
@@ -19,11 +19,7 @@ describe('Card Component', () => {
   test('renders the relevant card data', () => {
     const mockData = { title: 'Card Title' };
 
-    render(
-      <BrowserRouter>
-        <Card element={mockData} id="1" />
-      </BrowserRouter>
-    );
+    customRender(<Card element={mockData} id="1" />);
 
     expect(screen.getByText('Card Title')).toBeInTheDocument();
   });
@@ -31,11 +27,7 @@ describe('Card Component', () => {
   test('renders the relevant card data with name', () => {
     const mockData = { name: 'Card Title' };
 
-    render(
-      <BrowserRouter>
-        <Card element={mockData} id="1" />
-      </BrowserRouter>
-    );
+    customRender(<Card element={mockData} id="1" />);
 
     expect(screen.getByText('Card Title')).toBeInTheDocument();
   });
@@ -43,11 +35,7 @@ describe('Card Component', () => {
   test('renders the relevant card data without name', () => {
     const mockData = {};
 
-    render(
-      <BrowserRouter>
-        <Card element={mockData} id="1" />
-      </BrowserRouter>
-    );
+    customRender(<Card element={mockData} id="1" />);
 
     expect(screen.getByText('name')).toBeInTheDocument();
   });
@@ -65,11 +53,7 @@ describe('Card Component', () => {
 
     const mockData = { title: 'Card Title' };
 
-    render(
-      <BrowserRouter>
-        <Card element={mockData} id="1" />
-      </BrowserRouter>
-    );
+    customRender(<Card element={mockData} id="1" />);
 
     const cardElement = screen.getByText('Card Title');
     fireEvent.click(cardElement);

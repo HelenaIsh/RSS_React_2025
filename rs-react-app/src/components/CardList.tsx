@@ -1,28 +1,17 @@
 import { FC } from 'react';
-
 import { Card } from './Card';
-import { useNavigate, useSearchParams } from 'react-router-dom';
+import { useSelector } from 'react-redux';
+import { RootState } from '../../app/store';
 
-interface CardListProps {
-  results: unknown;
-  totalPages: string;
-}
-
-export const CardList: FC<CardListProps> = ({ results }) => {
-  const navigate = useNavigate();
-  const [searchParams] = useSearchParams();
-
-  const closeDetails = () => {
-    const queryString = searchParams.toString();
-    navigate(`/?${queryString}`);
-  };
+export const CardList: FC = () => {
+  const { results } = useSelector((state: RootState) => state.results);
 
   return (
     <>
       {typeof results === 'string' ? (
-        <p>{results}</p>
+        <p data-testid="card-list">{results}</p>
       ) : Array.isArray(results) && results.length > 0 ? (
-        <div className="results-table" onClick={closeDetails}>
+        <div className="results-table" data-testid="card-list">
           {results.map((el) => {
             return (
               <Card element={el} key={el.uid} id={el.uid} data-testid="card" />
@@ -30,7 +19,7 @@ export const CardList: FC<CardListProps> = ({ results }) => {
           })}
         </div>
       ) : (
-        <p>No results found</p>
+        <p data-testid="card-list">No results found</p>
       )}
     </>
   );
