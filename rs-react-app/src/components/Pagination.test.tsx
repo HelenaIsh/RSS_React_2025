@@ -27,7 +27,7 @@ describe('Pagination Component', () => {
   test('updates URL query parameter when page changes', () => {
     render(
       <BrowserRouter>
-        <Pagination totalPages="5" currentPage={2} />
+        <Pagination totalPages={5} currentPage={2} />
       </BrowserRouter>
     );
 
