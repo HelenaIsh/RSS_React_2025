@@ -1,21 +1,49 @@
 import { screen, fireEvent } from '@testing-library/react';
-import { vi, expect, test, describe } from 'vitest';
+import { vi, expect, test, describe, beforeEach } from 'vitest';
 import { Card } from './Card';
 import '@testing-library/jest-dom';
-import { useNavigate, useSearchParams } from 'react-router-dom';
+import { useRouter } from 'next/router';
 import { customRender } from './customRender';
 
-vi.mock('react-router-dom', async (importOriginal) => {
-  const actual = await importOriginal<typeof import('react-router-dom')>();
-  return {
-    ...actual,
-    useNavigate: vi.fn(),
-    useSearchParams: vi.fn(() => [new URLSearchParams('query=test'), vi.fn()]),
-    BrowserRouter: actual.BrowserRouter,
-  };
-});
+vi.mock('next/router', () => ({
+  useRouter: vi.fn(),
+}));
 
 describe('Card Component', () => {
+  let mockPush: ReturnType<typeof vi.fn>;
+  let mockRouter: ReturnType<typeof createMockRouter>;
+
+  const createMockRouter = () => ({
+    push: vi.fn(),
+    query: { query: 'test' },
+    route: '/',
+    pathname: '/',
+    asPath: '/',
+    basePath: '',
+    isLocaleDomain: false,
+    isReady: true,
+    isPreview: false,
+    isFallback: false,
+    events: {
+      on: vi.fn(),
+      off: vi.fn(),
+      emit: vi.fn(),
+    },
+    reload: vi.fn(),
+    back: vi.fn(),
+    forward: vi.fn(),
+    prefetch: vi.fn(),
+    replace: vi.fn(),
+    beforePopState: vi.fn(),
+  });
+
+  beforeEach(() => {
+    mockPush = vi.fn();
+    mockRouter = createMockRouter();
+    mockRouter.push = mockPush;
+    vi.mocked(useRouter).mockImplementation(() => mockRouter);
+  });
+
   test('renders the relevant card data', () => {
     const mockData = { title: 'Card Title' };
 
@@ -41,16 +69,6 @@ describe('Card Component', () => {
   });
 
   test('navigates to the details page on click', () => {
-    const mockNavigate = vi.fn();
-    const mockSearchParams = new URLSearchParams('query=test');
-    const mockSetSearchParams = vi.fn();
-
-    vi.mocked(useNavigate).mockReturnValue(mockNavigate);
-    vi.mocked(useSearchParams).mockReturnValue([
-      mockSearchParams,
-      mockSetSearchParams,
-    ]);
-
     const mockData = { title: 'Card Title' };
 
     customRender(<Card element={mockData} id="1" />);
@@ -58,6 +76,9 @@ describe('Card Component', () => {
     const cardElement = screen.getByText('Card Title');
     fireEvent.click(cardElement);
 
-    expect(mockNavigate).toHaveBeenCalledWith('/details/1?query=test');
+    expect(mockPush).toHaveBeenCalledWith({
+      pathname: '/details/1',
+      query: { query: 'test' },
+    });
   });
 });

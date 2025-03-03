@@ -4,19 +4,15 @@ import configureStore, { MockStoreEnhanced } from 'redux-mock-store';
 import { Main } from './Main';
 import { vi, describe, test, expect, beforeEach } from 'vitest';
 import { ThemeContext } from '../context/ThemeContext';
-import { AppDispatch, RootState } from '../../app/store';
-import { MemoryRouter, Route, Routes, useSearchParams } from 'react-router-dom';
+import { AppDispatch, RootState } from '../app/store';
 import '@testing-library/jest-dom';
+import { useRouter } from 'next/router';
+
+vi.mock('next/router', () => ({
+  useRouter: vi.fn(),
+}));
 
 const mockStore = configureStore<RootState, AppDispatch>([]);
-
-vi.mock('react-router-dom', async () => {
-  const actual = await vi.importActual('react-router-dom');
-  return {
-    ...actual,
-    useSearchParams: vi.fn(),
-  };
-});
 
 describe('Main Component', () => {
   let store: MockStoreEnhanced<RootState, AppDispatch>;
@@ -49,40 +45,73 @@ describe('Main Component', () => {
   });
 
   test('renders correctly with results and pagination', () => {
-    const mockSearchParams = new URLSearchParams('page=1');
-    const mockSetSearchParams = vi.fn();
-    vi.mocked(useSearchParams).mockReturnValue([
-      mockSearchParams,
-      mockSetSearchParams,
-    ]);
+    const pushMock = vi.fn();
+    vi.mocked(useRouter).mockReturnValue({
+      push: pushMock,
+      pathname: '/',
+      query: { page: '1' },
+      route: '/',
+      asPath: '/',
+      basePath: '',
+      isLocaleDomain: false,
+      isReady: true,
+      isPreview: false,
+      isFallback: false,
+      events: {
+        on: vi.fn(),
+        off: vi.fn(),
+        emit: vi.fn(),
+      },
+      reload: vi.fn(),
+      back: vi.fn(),
+      forward: vi.fn(),
+      prefetch: vi.fn(),
+      replace: vi.fn(),
+      beforePopState: vi.fn(),
+    });
 
     render(
       <Provider store={store}>
         <ThemeContext.Provider value={{ theme: 'light' }}>
-          <MemoryRouter>
-            <Main />
-          </MemoryRouter>
+          <Main />
         </ThemeContext.Provider>
       </Provider>
     );
 
     expect(screen.getByTestId('card-list')).toBeInTheDocument();
+    expect(screen.getByTestId('pagination')).toBeInTheDocument();
   });
 
   test('renders Flayout when items are checked', () => {
-    const mockSearchParams = new URLSearchParams('page=1');
-    const mockSetSearchParams = vi.fn();
-    vi.mocked(useSearchParams).mockReturnValue([
-      mockSearchParams,
-      mockSetSearchParams,
-    ]);
+    const pushMock = vi.fn();
+    vi.mocked(useRouter).mockReturnValue({
+      push: pushMock,
+      pathname: '/',
+      query: { page: '1' },
+      route: '/',
+      asPath: '/',
+      basePath: '',
+      isLocaleDomain: false,
+      isReady: true,
+      isPreview: false,
+      isFallback: false,
+      events: {
+        on: vi.fn(),
+        off: vi.fn(),
+        emit: vi.fn(),
+      },
+      reload: vi.fn(),
+      back: vi.fn(),
+      forward: vi.fn(),
+      prefetch: vi.fn(),
+      replace: vi.fn(),
+      beforePopState: vi.fn(),
+    });
 
     render(
       <Provider store={store}>
         <ThemeContext.Provider value={{ theme: 'light' }}>
-          <MemoryRouter>
-            <Main />
-          </MemoryRouter>
+          <Main />
         </ThemeContext.Provider>
       </Provider>
     );
@@ -90,31 +119,41 @@ describe('Main Component', () => {
     expect(screen.getByTestId('flayout')).toBeInTheDocument();
   });
 
-  test('renders Outlet when on details page', () => {
-    const mockSearchParams = new URLSearchParams('page=1');
-    const mockSetSearchParams = vi.fn();
-    vi.mocked(useSearchParams).mockReturnValue([
-      mockSearchParams,
-      mockSetSearchParams,
-    ]);
+  test('renders DetailedCard when on details page', () => {
+    const pushMock = vi.fn();
+    vi.mocked(useRouter).mockReturnValue({
+      push: pushMock,
+      pathname: '/details/123',
+      query: { id: '123', page: '1' },
+      route: '/details/[id]',
+      asPath: '/details/123',
+      basePath: '',
+      isLocaleDomain: false,
+      isReady: true,
+      isPreview: false,
+      isFallback: false,
+      events: {
+        on: vi.fn(),
+        off: vi.fn(),
+        emit: vi.fn(),
+      },
+      reload: vi.fn(),
+      back: vi.fn(),
+      forward: vi.fn(),
+      prefetch: vi.fn(),
+      replace: vi.fn(),
+      beforePopState: vi.fn(),
+    });
 
     render(
       <Provider store={store}>
         <ThemeContext.Provider value={{ theme: 'light' }}>
-          <MemoryRouter initialEntries={['/details/123']}>
-            <Routes>
-              <Route
-                path="/details/:id"
-                element={<div data-testid="outlet">Outlet</div>}
-              />
-              <Route path="/" element={<Main />} />
-            </Routes>
-          </MemoryRouter>
+          <Main />
         </ThemeContext.Provider>
       </Provider>
     );
 
-    expect(screen.getByTestId('outlet')).toBeInTheDocument();
+    expect(screen.getByTestId('detailed-card')).toBeInTheDocument();
   });
 
   test('does not render Pagination when results are empty', () => {
@@ -128,18 +167,35 @@ describe('Main Component', () => {
       },
     } as RootState);
 
-    const mockSearchParams = new URLSearchParams('page=1');
-    const mockSetSearchParams = vi.fn();
-    vi.mocked(useSearchParams).mockReturnValue([
-      mockSearchParams,
-      mockSetSearchParams,
-    ]);
+    const pushMock = vi.fn();
+    vi.mocked(useRouter).mockReturnValue({
+      push: pushMock,
+      pathname: '/',
+      query: { page: '1' },
+      route: '/',
+      asPath: '/',
+      basePath: '',
+      isLocaleDomain: false,
+      isReady: true,
+      isPreview: false,
+      isFallback: false,
+      events: {
+        on: vi.fn(),
+        off: vi.fn(),
+        emit: vi.fn(),
+      },
+      reload: vi.fn(),
+      back: vi.fn(),
+      forward: vi.fn(),
+      prefetch: vi.fn(),
+      replace: vi.fn(),
+      beforePopState: vi.fn(),
+    });
+
     render(
       <Provider store={store}>
         <ThemeContext.Provider value={{ theme: 'light' }}>
-          <MemoryRouter>
-            <Main />
-          </MemoryRouter>
+          <Main />
         </ThemeContext.Provider>
       </Provider>
     );

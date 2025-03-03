@@ -47,6 +47,7 @@ export const DetailedCard: FC = () => {
             ? 'details-container--light'
             : 'details-container--dark')
         }
+        data-testid="detailed-card"
       >
         Details:
         <div>{data}</div>
