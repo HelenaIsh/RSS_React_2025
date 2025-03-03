@@ -1,12 +1,13 @@
 import { FC } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
+
+import { useTheme } from '../context/ThemeContext';
 import {
   deleteChecks,
   fetchItemDetails,
   selectAllChecks,
-} from '../../features/check';
-import { AppDispatch } from '../../app/store';
-import { useTheme } from '../context/ThemeContext';
+} from '../features/check';
+import { AppDispatch } from '../app/store';
 
 export const Flayout: FC = () => {
   const checkedItems = useSelector(selectAllChecks);
@@ -41,7 +42,6 @@ export const Flayout: FC = () => {
       ).unwrap();
 
       const csvContent = convertToCSV(itemDetails);
-
       const fileHandle = await window.showSaveFilePicker({
         suggestedName: fileName,
         types: [

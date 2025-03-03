@@ -1,5 +1,5 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
-import { fetchResults } from '../src/services/fetchApi';
+import { fetchResults } from '../services/fetchApi';
 
 interface ResultsState {
   results: unknown;
