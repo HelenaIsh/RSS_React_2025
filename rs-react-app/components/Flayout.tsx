@@ -7,7 +7,7 @@ import {
   fetchItemDetails,
   selectAllChecks,
 } from '../features/check';
-import { AppDispatch } from '../app/store';
+import { AppDispatch } from '../store/store';
 
 export const Flayout: FC = () => {
   const checkedItems = useSelector(selectAllChecks);

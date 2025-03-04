@@ -4,7 +4,7 @@ import { CardList } from './CardList';
 import '@testing-library/jest-dom';
 import configureStore, { MockStoreEnhanced } from 'redux-mock-store';
 import { Provider } from 'react-redux';
-import { AppDispatch, RootState } from '../app/store';
+import { AppDispatch, RootState } from '../store/store';
 
 vi.mock('./Card', () => ({
   Card: ({ element }: { element: { uid: string } }) => (

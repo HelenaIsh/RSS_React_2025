@@ -1,8 +1,9 @@
 import type { AppProps } from 'next/app';
 import { ThemeProvider } from '../context/ThemeContext';
 import { Provider } from 'react-redux';
-import { store } from '../app/store';
+import { store } from '../store/store';
 import '../styles/index.css';
+import '../styles/app.css';
 
 function MyApp({ Component, pageProps }: AppProps) {
   return (

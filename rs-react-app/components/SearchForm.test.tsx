@@ -5,7 +5,7 @@ import { SearchForm } from './SearchForm';
 import { vi, describe, test, expect, beforeEach } from 'vitest';
 import { ThemeContext } from '../context/ThemeContext';
 import '@testing-library/jest-dom';
-import { AppDispatch, RootState } from '../app/store';
+import { AppDispatch, RootState } from '../store/store';
 import { useRouter } from 'next/router';
 
 vi.mock('next/router', () => ({

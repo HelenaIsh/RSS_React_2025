@@ -5,7 +5,7 @@ import { useSelector } from 'react-redux';
 import { Flayout } from './Flayout';
 import { useRouter } from 'next/router';
 import { DetailedCard } from './DetailedCard';
-import { RootState } from '../app/store';
+import { RootState } from '../store/store';
 import { selectAllChecks } from '../features/check';
 
 export const Main: FC = () => {

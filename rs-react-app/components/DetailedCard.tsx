@@ -31,7 +31,8 @@ export const DetailedCard: FC = () => {
 
   const closeDetails = () => {
     const { query } = router;
-    const { id, ...restQuery } = query;
+    const restQuery = { ...query };
+    delete restQuery.id;
     router.push({
       pathname: `/`,
       query: restQuery,

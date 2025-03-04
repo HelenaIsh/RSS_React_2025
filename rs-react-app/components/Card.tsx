@@ -31,7 +31,8 @@ export const Card: FC<CardProps> = ({ element, id }) => {
     }
     const target = e.target as HTMLElement;
     const row = target.closest('.row');
-    const { id, ...restQuery } = query;
+    const restQuery = { ...query };
+    delete restQuery.id;
     if (row) {
       router.push({
         pathname: `/details/${row.id}`,

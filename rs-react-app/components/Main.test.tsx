@@ -4,7 +4,7 @@ import configureStore, { MockStoreEnhanced } from 'redux-mock-store';
 import { Main } from './Main';
 import { vi, describe, test, expect, beforeEach } from 'vitest';
 import { ThemeContext } from '../context/ThemeContext';
-import { AppDispatch, RootState } from '../app/store';
+import { AppDispatch, RootState } from '../store/store';
 import '@testing-library/jest-dom';
 import { useRouter } from 'next/router';
 

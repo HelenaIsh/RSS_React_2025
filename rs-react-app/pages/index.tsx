@@ -1,7 +1,5 @@
 import React, { FC } from 'react';
 
-import '../styles/App.css';
-
 import { useTheme } from '../context/ThemeContext';
 import { ErrorBoundary } from '../components/ErrorBoundary';
 import { Header } from '../components/Header';

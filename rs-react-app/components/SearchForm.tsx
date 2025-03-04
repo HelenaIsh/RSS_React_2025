@@ -1,9 +1,9 @@
-import React, { FC, useEffect, useState } from 'react';
+import React, { FC, useEffect } from 'react';
 import { Spinner } from './Spinner';
 import { useTheme } from '../context/ThemeContext';
 import { useDispatch, useSelector } from 'react-redux';
 import { useRouter } from 'next/router';
-import { AppDispatch, RootState } from '../app/store';
+import { AppDispatch, RootState } from '../store/store';
 import { fetchData } from '../features/results';
 import { deleteChecks } from '../features/check';
 import { useLocalStorage } from '../src/hooks/useLocalStorage';
