@@ -6,9 +6,9 @@ import { vi, describe, test, expect, beforeEach } from 'vitest';
 import { ThemeContext } from '../context/ThemeContext';
 import { AppDispatch, RootState } from '../store/store';
 import '@testing-library/jest-dom';
-import { useRouter } from 'next/router';
+import { useRouter } from 'next/navigation';
 
-vi.mock('next/router', () => ({
+vi.mock('next/navigation', () => ({
   useRouter: vi.fn(),
 }));
 
@@ -48,26 +48,11 @@ describe('Main Component', () => {
     const pushMock = vi.fn();
     vi.mocked(useRouter).mockReturnValue({
       push: pushMock,
-      pathname: '/',
-      query: { page: '1' },
-      route: '/',
-      asPath: '/',
-      basePath: '',
-      isLocaleDomain: false,
-      isReady: true,
-      isPreview: false,
-      isFallback: false,
-      events: {
-        on: vi.fn(),
-        off: vi.fn(),
-        emit: vi.fn(),
-      },
-      reload: vi.fn(),
+      replace: vi.fn(),
       back: vi.fn(),
       forward: vi.fn(),
+      refresh: vi.fn(),
       prefetch: vi.fn(),
-      replace: vi.fn(),
-      beforePopState: vi.fn(),
     });
 
     render(
@@ -86,26 +71,11 @@ describe('Main Component', () => {
     const pushMock = vi.fn();
     vi.mocked(useRouter).mockReturnValue({
       push: pushMock,
-      pathname: '/',
-      query: { page: '1' },
-      route: '/',
-      asPath: '/',
-      basePath: '',
-      isLocaleDomain: false,
-      isReady: true,
-      isPreview: false,
-      isFallback: false,
-      events: {
-        on: vi.fn(),
-        off: vi.fn(),
-        emit: vi.fn(),
-      },
-      reload: vi.fn(),
+      replace: vi.fn(),
       back: vi.fn(),
       forward: vi.fn(),
+      refresh: vi.fn(),
       prefetch: vi.fn(),
-      replace: vi.fn(),
-      beforePopState: vi.fn(),
     });
 
     render(
@@ -123,26 +93,11 @@ describe('Main Component', () => {
     const pushMock = vi.fn();
     vi.mocked(useRouter).mockReturnValue({
       push: pushMock,
-      pathname: '/details/123',
-      query: { id: '123', page: '1' },
-      route: '/details/[id]',
-      asPath: '/details/123',
-      basePath: '',
-      isLocaleDomain: false,
-      isReady: true,
-      isPreview: false,
-      isFallback: false,
-      events: {
-        on: vi.fn(),
-        off: vi.fn(),
-        emit: vi.fn(),
-      },
-      reload: vi.fn(),
+      replace: vi.fn(),
       back: vi.fn(),
       forward: vi.fn(),
+      refresh: vi.fn(),
       prefetch: vi.fn(),
-      replace: vi.fn(),
-      beforePopState: vi.fn(),
     });
 
     render(
@@ -170,26 +125,11 @@ describe('Main Component', () => {
     const pushMock = vi.fn();
     vi.mocked(useRouter).mockReturnValue({
       push: pushMock,
-      pathname: '/',
-      query: { page: '1' },
-      route: '/',
-      asPath: '/',
-      basePath: '',
-      isLocaleDomain: false,
-      isReady: true,
-      isPreview: false,
-      isFallback: false,
-      events: {
-        on: vi.fn(),
-        off: vi.fn(),
-        emit: vi.fn(),
-      },
-      reload: vi.fn(),
+      replace: vi.fn(),
       back: vi.fn(),
       forward: vi.fn(),
+      refresh: vi.fn(),
       prefetch: vi.fn(),
-      replace: vi.fn(),
-      beforePopState: vi.fn(),
     });
 
     render(

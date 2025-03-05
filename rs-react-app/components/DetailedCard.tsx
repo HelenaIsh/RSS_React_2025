@@ -3,14 +3,16 @@ import { FC, useState, useEffect } from 'react';
 import { Spinner } from './Spinner';
 import { fetchSingleData } from '../services/fetchSingleData';
 import { useTheme } from '../context/ThemeContext';
-import { useRouter } from 'next/router';
+import { useParams, useRouter, useSearchParams } from 'next/navigation';
 
 export const DetailedCard: FC = () => {
   const [loading, setLoading] = useState(false);
   const [data, setData] = useState<string | null>(null);
   const router = useRouter();
   const { theme } = useTheme();
-  const { id } = router.query;
+  const params = useParams();
+  const searchParams = useSearchParams();
+  const id = params.id;
 
   const fetchData = async () => {
     if (!id) return;
@@ -30,13 +32,9 @@ export const DetailedCard: FC = () => {
   }, [id]);
 
   const closeDetails = () => {
-    const { query } = router;
-    const restQuery = { ...query };
-    delete restQuery.id;
-    router.push({
-      pathname: `/`,
-      query: restQuery,
-    });
+    const params = new URLSearchParams(searchParams.toString());
+    params.delete('id');
+    router.push(`/?${params.toString()}`);
   };
 
   return (

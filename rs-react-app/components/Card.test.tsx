@@ -2,10 +2,10 @@ import { screen, fireEvent } from '@testing-library/react';
 import { vi, expect, test, describe, beforeEach } from 'vitest';
 import { Card } from './Card';
 import '@testing-library/jest-dom';
-import { useRouter } from 'next/router';
+import { useRouter } from 'next/compat/router';
 import { customRender } from './customRender';
 
-vi.mock('next/router', () => ({
+vi.mock('next/compat/router', () => ({
   useRouter: vi.fn(),
 }));
 

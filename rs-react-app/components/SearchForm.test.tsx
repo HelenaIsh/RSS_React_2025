@@ -6,9 +6,9 @@ import { vi, describe, test, expect, beforeEach } from 'vitest';
 import { ThemeContext } from '../context/ThemeContext';
 import '@testing-library/jest-dom';
 import { AppDispatch, RootState } from '../store/store';
-import { useRouter } from 'next/router';
+import { useRouter } from 'next/navigation';
 
-vi.mock('next/router', () => ({
+vi.mock('next/navigation', () => ({
   useRouter: vi.fn(),
 }));
 
@@ -33,26 +33,11 @@ describe('SearchForm Component', () => {
 
     vi.mocked(useRouter).mockReturnValue({
       push: mockPush,
-      query: { page: '1' },
-      route: '/',
-      pathname: '/',
-      asPath: '/',
-      basePath: '',
-      isLocaleDomain: false,
-      isReady: true,
-      isPreview: false,
-      isFallback: false,
-      events: {
-        on: vi.fn(),
-        off: vi.fn(),
-        emit: vi.fn(),
-      },
-      reload: vi.fn(),
+      replace: vi.fn(),
       back: vi.fn(),
       forward: vi.fn(),
+      refresh: vi.fn(),
       prefetch: vi.fn(),
-      replace: vi.fn(),
-      beforePopState: vi.fn(),
     });
   });
 

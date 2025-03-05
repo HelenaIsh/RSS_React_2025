@@ -1,4 +1,4 @@
-import { useRouter } from 'next/router';
+import { useRouter, useSearchParams } from 'next/navigation';
 import { FC } from 'react';
 
 interface PaginationProps {
@@ -11,16 +11,12 @@ export const Pagination: FC<PaginationProps> = ({
   currentPage,
 }) => {
   const router = useRouter();
+  const searchParams = useSearchParams();
 
   const changePage = (newPage: number) => {
-    const { query } = router;
-
-    const updatedQuery = { ...query, page: newPage.toString() };
-
-    router.push({
-      pathname: router.pathname,
-      query: updatedQuery,
-    });
+    const updatedParams = new URLSearchParams(searchParams.toString());
+    updatedParams.set('page', newPage.toString());
+    router.push(`?${updatedParams.toString()}`);
   };
 
   return (

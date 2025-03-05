@@ -3,7 +3,7 @@ import { CardList } from './CardList';
 import { Pagination } from './Pagination';
 import { useSelector } from 'react-redux';
 import { Flayout } from './Flayout';
-import { useRouter } from 'next/router';
+import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import { DetailedCard } from './DetailedCard';
 import { RootState } from '../store/store';
 import { selectAllChecks } from '../features/check';
@@ -13,10 +13,12 @@ export const Main: FC = () => {
     (state: RootState) => state.results
   );
   const router = useRouter();
+  const pathname = usePathname();
+  const searchParams = useSearchParams();
 
-  const isDetailsPage = router.pathname.startsWith('/details/');
+  const isDetailsPage = pathname.startsWith('/details/');
 
-  let page = parseInt(router.query.page as string) || 0;
+  let page = parseInt(searchParams.get('page') || '0', 10);
   if (page > totalPages) {
     page = totalPages;
   }

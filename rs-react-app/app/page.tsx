@@ -1,5 +1,6 @@
-import React, { FC } from 'react';
+'use client';
 
+import React, { FC } from 'react';
 import { useTheme } from '../context/ThemeContext';
 import { ErrorBoundary } from '../components/ErrorBoundary';
 import { Header } from '../components/Header';

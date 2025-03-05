@@ -2,9 +2,9 @@ import { render, screen, fireEvent } from '@testing-library/react';
 import { Pagination } from './Pagination';
 import { vi, expect, test, describe, beforeEach } from 'vitest';
 import '@testing-library/jest-dom';
-import { useRouter } from 'next/router';
+import { useRouter } from 'next/navigation';
 
-vi.mock('next/router', () => ({
+vi.mock('next/navigation', () => ({
   useRouter: vi.fn(),
 }));
 
@@ -16,26 +16,11 @@ describe('Pagination Component', () => {
 
     vi.mocked(useRouter).mockReturnValue({
       push: mockPush,
-      query: { page: '2' },
-      route: '/',
-      pathname: '/',
-      asPath: '/',
-      basePath: '',
-      isLocaleDomain: false,
-      isReady: true,
-      isPreview: false,
-      isFallback: false,
-      events: {
-        on: vi.fn(),
-        off: vi.fn(),
-        emit: vi.fn(),
-      },
-      reload: vi.fn(),
+      replace: vi.fn(),
       back: vi.fn(),
       forward: vi.fn(),
+      refresh: vi.fn(),
       prefetch: vi.fn(),
-      replace: vi.fn(),
-      beforePopState: vi.fn(),
     });
   });
 
@@ -45,9 +30,6 @@ describe('Pagination Component', () => {
     const forwardButton = screen.getByText('Forward');
     fireEvent.click(forwardButton);
 
-    expect(mockPush).toHaveBeenCalledWith({
-      pathname: '/',
-      query: { page: '3' },
-    });
+    expect(mockPush).toHaveBeenCalledWith('/?page=3');
   });
 });
