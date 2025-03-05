@@ -6,10 +6,18 @@ import { vi, describe, test, expect, beforeEach } from 'vitest';
 import { ThemeContext } from '../context/ThemeContext';
 import { AppDispatch, RootState } from '../store/store';
 import '@testing-library/jest-dom';
-import { useRouter } from 'next/navigation';
+import {
+  useRouter,
+  usePathname,
+  useSearchParams,
+  useParams,
+} from 'next/navigation';
 
 vi.mock('next/navigation', () => ({
   useRouter: vi.fn(),
+  usePathname: vi.fn(),
+  useSearchParams: vi.fn(),
+  useParams: vi.fn(),
 }));
 
 const mockStore = configureStore<RootState, AppDispatch>([]);
@@ -54,6 +62,12 @@ describe('Main Component', () => {
       refresh: vi.fn(),
       prefetch: vi.fn(),
     });
+    vi.mocked(useSearchParams).mockReturnValue(
+      new URLSearchParams('page=2') as unknown as ReturnType<
+        typeof useSearchParams
+      >
+    );
+    vi.mocked(usePathname).mockReturnValue('/');
 
     render(
       <Provider store={store}>
@@ -100,6 +114,12 @@ describe('Main Component', () => {
       prefetch: vi.fn(),
     });
 
+    vi.mocked(usePathname).mockReturnValue('/details/');
+
+    vi.mocked(useParams).mockReturnValue({
+      id: '123',
+    });
+
     render(
       <Provider store={store}>
         <ThemeContext.Provider value={{ theme: 'light' }}>
@@ -130,6 +150,10 @@ describe('Main Component', () => {
       forward: vi.fn(),
       refresh: vi.fn(),
       prefetch: vi.fn(),
+    });
+
+    vi.mocked(useParams).mockReturnValue({
+      id: '123',
     });
 
     render(

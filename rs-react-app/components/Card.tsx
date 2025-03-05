@@ -32,9 +32,7 @@ export const Card: FC<CardProps> = ({ element, id }) => {
     const target = e.target as HTMLElement;
     const row = target.closest('.row');
     if (row) {
-      const params = new URLSearchParams(searchParams.toString());
-      params.delete('id');
-      router.push(`/details/${row.id}?${params.toString()}`);
+      router.push(`/details/${row.id}?${searchParams.toString()}`);
     }
   };
 

@@ -4,11 +4,12 @@ import '@testing-library/jest-dom';
 import { vi, expect, test, describe, beforeEach } from 'vitest';
 import { fetchSingleData } from '../services/fetchSingleData';
 import { ThemeProvider } from '../context/ThemeContext';
-import { useRouter, useSearchParams } from 'next/navigation';
+import { useRouter, useSearchParams, useParams } from 'next/navigation';
 
 vi.mock('next/navigation', () => ({
   useRouter: vi.fn(),
   useSearchParams: vi.fn(),
+  useParams: vi.fn(),
 }));
 
 vi.mock('../services/fetchSingleData', () => ({
@@ -38,9 +39,13 @@ describe('DetailedCard', () => {
       prefetch: vi.fn(),
     });
 
+    vi.mocked(useParams).mockReturnValue({
+      id: '123',
+    });
+
     vi.mocked(useSearchParams).mockReturnValue({
       get: (key: string) => (key === 'id' ? '123' : null),
-    } as any);
+    } as ReturnType<typeof useSearchParams>);
   });
 
   test('should display a loading spinner initially', () => {

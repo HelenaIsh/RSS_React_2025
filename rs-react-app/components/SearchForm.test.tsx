@@ -6,10 +6,12 @@ import { vi, describe, test, expect, beforeEach } from 'vitest';
 import { ThemeContext } from '../context/ThemeContext';
 import '@testing-library/jest-dom';
 import { AppDispatch, RootState } from '../store/store';
-import { useRouter } from 'next/navigation';
+import { useRouter, useSearchParams, useParams } from 'next/navigation';
 
 vi.mock('next/navigation', () => ({
   useRouter: vi.fn(),
+  useSearchParams: vi.fn(),
+  useParams: vi.fn(),
 }));
 
 const mockStore = configureStore<RootState, AppDispatch>([]);
@@ -38,6 +40,16 @@ describe('SearchForm Component', () => {
       forward: vi.fn(),
       refresh: vi.fn(),
       prefetch: vi.fn(),
+    });
+
+    vi.mocked(useSearchParams).mockReturnValue(
+      new URLSearchParams('page=2') as unknown as ReturnType<
+        typeof useSearchParams
+      >
+    );
+
+    vi.mocked(useParams).mockReturnValue({
+      id: '123',
     });
   });
 

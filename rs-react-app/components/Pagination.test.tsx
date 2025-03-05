@@ -2,10 +2,11 @@ import { render, screen, fireEvent } from '@testing-library/react';
 import { Pagination } from './Pagination';
 import { vi, expect, test, describe, beforeEach } from 'vitest';
 import '@testing-library/jest-dom';
-import { useRouter } from 'next/navigation';
+import { useRouter, useSearchParams } from 'next/navigation';
 
 vi.mock('next/navigation', () => ({
   useRouter: vi.fn(),
+  useSearchParams: vi.fn(),
 }));
 
 describe('Pagination Component', () => {
@@ -22,6 +23,12 @@ describe('Pagination Component', () => {
       refresh: vi.fn(),
       prefetch: vi.fn(),
     });
+
+    vi.mocked(useSearchParams).mockReturnValue(
+      new URLSearchParams('page=2') as unknown as ReturnType<
+        typeof useSearchParams
+      >
+    );
   });
 
   test('updates URL query parameter when page changes', () => {
@@ -30,6 +37,6 @@ describe('Pagination Component', () => {
     const forwardButton = screen.getByText('Forward');
     fireEvent.click(forwardButton);
 
-    expect(mockPush).toHaveBeenCalledWith('/?page=3');
+    expect(mockPush).toHaveBeenCalledWith('?page=3');
   });
 });
