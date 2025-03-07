@@ -12,9 +12,9 @@ interface PageProps {
 export default async function Page({ searchParams }: PageProps) {
   const { name, page } = await searchParams;
   return (
-    <div className="app">
+    <>
       <Header />
       <Main name={name} page={page} />
-    </div>
+    </>
   );
 }
