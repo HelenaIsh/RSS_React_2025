@@ -1,25 +1,20 @@
-'use client';
-
-import React, { FC } from 'react';
-import { useTheme } from '../context/ThemeContext';
-import { ErrorBoundary } from '../components/ErrorBoundary';
+import React from 'react';
 import { Header } from '../components/Header';
 import { Main } from '../components/Main';
-import { ErrorButton } from '../components/ErrorButton';
 
-const App: FC = () => {
-  const { theme } = useTheme();
+interface PageProps {
+  searchParams: {
+    name?: string;
+    page?: string;
+  };
+}
 
+export default async function Page({ searchParams }: PageProps) {
+  const { name, page } = await searchParams;
   return (
-    <div className={'app ' + (theme === 'light' ? 'light' : 'dark')}>
-      <ErrorBoundary
-        fallback={<h2>Something went wrong. Please try again later.</h2>}
-      >
-        <Header />
-        <Main />
-        <ErrorButton />
-      </ErrorBoundary>
+    <div className="app">
+      <Header />
+      <Main name={name} page={page} />
     </div>
   );
-};
-export default App;
+}

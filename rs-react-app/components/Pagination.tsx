@@ -1,17 +1,18 @@
+'use client';
+
 import { useRouter, useSearchParams } from 'next/navigation';
 import { FC } from 'react';
+import { useSelector } from 'react-redux';
+import { RootState } from '../store/store';
 
-interface PaginationProps {
-  totalPages: number;
-  currentPage: number;
-}
-
-export const Pagination: FC<PaginationProps> = ({
-  totalPages,
-  currentPage,
-}) => {
+export const Pagination: FC = () => {
   const router = useRouter();
   const searchParams = useSearchParams();
+  const { totalPages } = useSelector((state: RootState) => state.results);
+  let currentPage = parseInt(searchParams.get('page') || '0', 10);
+  if (currentPage > totalPages) {
+    currentPage = totalPages;
+  }
 
   const changePage = (newPage: number) => {
     const updatedParams = new URLSearchParams(searchParams.toString());

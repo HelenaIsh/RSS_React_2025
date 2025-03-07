@@ -1,3 +1,5 @@
+'use client';
+
 import { FC } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { useTheme } from '../context/ThemeContext';

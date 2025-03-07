@@ -3,14 +3,20 @@ import { Pagination } from './Pagination';
 import { vi, expect, test, describe, beforeEach } from 'vitest';
 import '@testing-library/jest-dom';
 import { useRouter, useSearchParams } from 'next/navigation';
+import { AppDispatch, RootState } from '../store/store';
+import configureStore, { MockStoreEnhanced } from 'redux-mock-store';
+import { Provider } from 'react-redux';
 
 vi.mock('next/navigation', () => ({
   useRouter: vi.fn(),
   useSearchParams: vi.fn(),
 }));
 
+const mockStore = configureStore<RootState, AppDispatch>([]);
+
 describe('Pagination Component', () => {
   const mockPush = vi.fn();
+  let store: MockStoreEnhanced<RootState, AppDispatch>;
 
   beforeEach(() => {
     mockPush.mockClear();
@@ -32,7 +38,20 @@ describe('Pagination Component', () => {
   });
 
   test('updates URL query parameter when page changes', () => {
-    render(<Pagination totalPages={5} currentPage={2} />);
+    store = mockStore({
+      checks: { selectedIds: [], itemDetails: [] },
+      results: {
+        results: 'error message',
+        totalPages: 5,
+        loading: false,
+        error: null,
+      },
+    } as RootState);
+    render(
+      <Provider store={store}>
+        <Pagination />
+      </Provider>
+    );
 
     const forwardButton = screen.getByText('Forward');
     fireEvent.click(forwardButton);
