@@ -1,8 +1,8 @@
 import { FC } from 'react';
-import { useNavigate, useSearchParams } from 'react-router-dom';
+import { useRouter } from 'next/router';
 import { useTheme } from '../context/ThemeContext';
 import { useDispatch, useSelector } from 'react-redux';
-import { addCheck, selectAllChecks } from '../../features/check';
+import { addCheck, selectAllChecks } from '../features/check';
 
 interface CardProps {
   element: unknown;
@@ -10,10 +10,10 @@ interface CardProps {
 }
 
 export const Card: FC<CardProps> = ({ element, id }) => {
-  const navigate = useNavigate();
-  const [searchParams] = useSearchParams();
   const { theme } = useTheme();
   const dispatch = useDispatch();
+  const router = useRouter();
+  const { query } = router;
 
   let title = '';
   if (element && typeof element === 'object') {
@@ -31,9 +31,13 @@ export const Card: FC<CardProps> = ({ element, id }) => {
     }
     const target = e.target as HTMLElement;
     const row = target.closest('.row');
-    const queryString = searchParams.toString();
+    const restQuery = { ...query };
+    delete restQuery.id;
     if (row) {
-      navigate(`/details/${row.id}?${queryString}`);
+      router.push({
+        pathname: `/details/${row.id}`,
+        query: restQuery,
+      });
     }
   };
 

@@ -1,16 +1,13 @@
 import { render, screen } from '@testing-library/react';
 import { DetailedCard } from './DetailedCard';
-import { useNavigate, useParams, useSearchParams } from 'react-router-dom';
 import '@testing-library/jest-dom';
 import { vi, expect, test, describe, beforeEach } from 'vitest';
 import { fetchSingleData } from '../services/fetchSingleData';
 import { ThemeProvider } from '../context/ThemeContext';
+import { useRouter } from 'next/router';
 
-vi.mock('react-router-dom', () => ({
-  ...vi.importActual('react-router-dom'),
-  useNavigate: vi.fn(),
-  useParams: vi.fn(),
-  useSearchParams: vi.fn(),
+vi.mock('next/router', () => ({
+  useRouter: vi.fn(),
 }));
 
 vi.mock('../services/fetchSingleData', () => ({
@@ -18,26 +15,47 @@ vi.mock('../services/fetchSingleData', () => ({
 }));
 
 describe('DetailedCard', () => {
+  const pushMock = vi.fn();
   const setSearchParamsMock = vi.fn();
-  const navigateMock = vi.fn();
 
-  beforeEach(() => {
-    setSearchParamsMock.mockClear();
-    navigateMock.mockClear();
-    vi.mocked(useNavigate).mockReturnValue(navigateMock);
-    vi.mocked(useParams).mockReturnValue({ id: '123' });
-    vi.mocked(useSearchParams).mockReturnValue([
-      new URLSearchParams(),
-      setSearchParamsMock,
-    ]);
-  });
-
-  test('should display a loading spinner initially', () => {
-    render(
+  const renderDetailedCard = () => {
+    return render(
       <ThemeProvider>
         <DetailedCard />
       </ThemeProvider>
     );
+  };
+
+  beforeEach(() => {
+    pushMock.mockClear();
+    setSearchParamsMock.mockClear();
+    vi.mocked(useRouter).mockReturnValue({
+      push: pushMock,
+      query: { id: '123' },
+      route: '/',
+      pathname: '/',
+      asPath: '/',
+      basePath: '',
+      isLocaleDomain: false,
+      isReady: true,
+      isPreview: false,
+      isFallback: false,
+      events: {
+        on: vi.fn(),
+        off: vi.fn(),
+        emit: vi.fn(),
+      },
+      reload: vi.fn(),
+      back: vi.fn(),
+      forward: vi.fn(),
+      prefetch: vi.fn(),
+      replace: vi.fn(),
+      beforePopState: vi.fn(),
+    });
+  });
+
+  test('should display a loading spinner initially', () => {
+    renderDetailedCard();
 
     expect(screen.getByTestId('spinner')).toBeInTheDocument();
   });
@@ -49,11 +67,7 @@ describe('DetailedCard', () => {
     };
     vi.mocked(fetchSingleData).mockResolvedValue(mockData);
 
-    render(
-      <ThemeProvider>
-        <DetailedCard />
-      </ThemeProvider>
-    );
+    renderDetailedCard();
 
     const nameElement = await screen.findByText((content) =>
       content.includes('Test Data')

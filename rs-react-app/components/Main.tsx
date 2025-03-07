@@ -1,19 +1,22 @@
 import { FC } from 'react';
 import { CardList } from './CardList';
-import { Outlet, useSearchParams } from 'react-router-dom';
 import { Pagination } from './Pagination';
 import { useSelector } from 'react-redux';
-import { selectAllChecks } from '../../features/check';
 import { Flayout } from './Flayout';
-import { RootState } from '../../app/store';
+import { useRouter } from 'next/router';
+import { DetailedCard } from './DetailedCard';
+import { RootState } from '../store/store';
+import { selectAllChecks } from '../features/check';
 
 export const Main: FC = () => {
-  const [searchParams] = useSearchParams();
   const { results, totalPages } = useSelector(
     (state: RootState) => state.results
   );
+  const router = useRouter();
 
-  let page = parseInt(searchParams.get('page') || '0');
+  const isDetailsPage = router.pathname.startsWith('/details/');
+
+  let page = parseInt(router.query.page as string) || 0;
   if (page > totalPages) {
     page = totalPages;
   }
@@ -23,7 +26,7 @@ export const Main: FC = () => {
     <main>
       <div className="main-container">
         <CardList />
-        {location.pathname.startsWith('/details/') && <Outlet />}
+        {isDetailsPage && <DetailedCard />}
       </div>
       {Array.isArray(results) && results.length > 0 && (
         <Pagination totalPages={totalPages} currentPage={page} />

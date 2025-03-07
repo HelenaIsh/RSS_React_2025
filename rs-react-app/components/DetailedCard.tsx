@@ -1,23 +1,22 @@
 import { FC, useState, useEffect } from 'react';
-import { useNavigate, useParams, useSearchParams } from 'react-router-dom';
 
 import { Spinner } from './Spinner';
 import { fetchSingleData } from '../services/fetchSingleData';
 import { useTheme } from '../context/ThemeContext';
+import { useRouter } from 'next/router';
 
 export const DetailedCard: FC = () => {
-  const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
-  const { id } = useParams();
   const [data, setData] = useState<string | null>(null);
-  const [searchParams] = useSearchParams();
+  const router = useRouter();
   const { theme } = useTheme();
+  const { id } = router.query;
 
   const fetchData = async () => {
     if (!id) return;
     setLoading(true);
     try {
-      const data = await fetchSingleData(id);
+      const data = await fetchSingleData(id as string);
       setData(JSON.stringify(data, null, 2));
     } catch (err: unknown) {
       return err instanceof Error ? err.message : 'An unknown error occurred';
@@ -31,8 +30,13 @@ export const DetailedCard: FC = () => {
   }, [id]);
 
   const closeDetails = () => {
-    const queryString = searchParams.toString();
-    navigate(`/?${queryString}`);
+    const { query } = router;
+    const restQuery = { ...query };
+    delete restQuery.id;
+    router.push({
+      pathname: `/`,
+      query: restQuery,
+    });
   };
 
   return (
@@ -44,6 +48,7 @@ export const DetailedCard: FC = () => {
             ? 'details-container--light'
             : 'details-container--dark')
         }
+        data-testid="detailed-card"
       >
         Details:
         <div>{data}</div>

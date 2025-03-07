@@ -2,15 +2,15 @@ import { render, screen, fireEvent } from '@testing-library/react';
 import { Provider } from 'react-redux';
 import configureStore, { MockStoreEnhanced } from 'redux-mock-store';
 import { Flayout } from './Flayout';
-import { deleteChecks, fetchItemDetails } from '../../features/check';
 import { vi, describe, test, expect, beforeEach } from 'vitest';
 import { ThemeContext } from '../context/ThemeContext';
-import { AppDispatch, RootState } from '../../app/store';
 import '@testing-library/jest-dom';
+import { AppDispatch, RootState } from '../store/store';
+import { deleteChecks, fetchItemDetails } from '../features/check';
 
 const mockStore = configureStore<RootState, AppDispatch>([]);
 
-vi.mock('../../features/check', () => ({
+vi.mock('../features/check', () => ({
   deleteChecks: vi.fn(),
   fetchItemDetails: vi.fn(() => ({
     unwrap: vi.fn(() =>

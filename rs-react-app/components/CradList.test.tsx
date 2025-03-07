@@ -1,11 +1,10 @@
 import { render, screen } from '@testing-library/react';
-import { BrowserRouter } from 'react-router-dom';
 import { vi, expect, test, describe } from 'vitest';
 import { CardList } from './CardList';
 import '@testing-library/jest-dom';
 import configureStore, { MockStoreEnhanced } from 'redux-mock-store';
-import { AppDispatch, RootState } from '../../app/store';
 import { Provider } from 'react-redux';
+import { AppDispatch, RootState } from '../store/store';
 
 vi.mock('./Card', () => ({
   Card: ({ element }: { element: { uid: string } }) => (
@@ -40,11 +39,9 @@ describe('CardList Component', () => {
     } as RootState);
 
     render(
-      <BrowserRouter>
-        <Provider store={store}>
-          <CardList />
-        </Provider>
-      </BrowserRouter>
+      <Provider store={store}>
+        <CardList />
+      </Provider>
     );
 
     const cards = screen.getAllByTestId('card');
@@ -62,11 +59,9 @@ describe('CardList Component', () => {
       },
     } as RootState);
     render(
-      <BrowserRouter>
-        <Provider store={store}>
-          <CardList />
-        </Provider>
-      </BrowserRouter>
+      <Provider store={store}>
+        <CardList />
+      </Provider>
     );
 
     expect(screen.getByText('No results found')).toBeInTheDocument();
@@ -83,11 +78,9 @@ describe('CardList Component', () => {
       },
     } as RootState);
     render(
-      <BrowserRouter>
-        <Provider store={store}>
-          <CardList />
-        </Provider>
-      </BrowserRouter>
+      <Provider store={store}>
+        <CardList />
+      </Provider>
     );
 
     expect(screen.getByText('error message')).toBeInTheDocument();
@@ -104,11 +97,9 @@ describe('CardList Component', () => {
       },
     } as RootState);
     render(
-      <BrowserRouter>
-        <Provider store={store}>
-          <CardList />
-        </Provider>
-      </BrowserRouter>
+      <Provider store={store}>
+        <CardList />
+      </Provider>
     );
     expect(screen.getByText('No results found')).toBeInTheDocument();
   });

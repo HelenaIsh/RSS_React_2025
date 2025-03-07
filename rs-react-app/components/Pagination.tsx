@@ -1,5 +1,5 @@
+import { useRouter } from 'next/router';
 import { FC } from 'react';
-import { useSearchParams } from 'react-router-dom';
 
 interface PaginationProps {
   totalPages: number;
@@ -10,10 +10,17 @@ export const Pagination: FC<PaginationProps> = ({
   totalPages,
   currentPage,
 }) => {
-  const [, setSearchParams] = useSearchParams();
+  const router = useRouter();
 
   const changePage = (newPage: number) => {
-    setSearchParams({ page: newPage.toString() });
+    const { query } = router;
+
+    const updatedQuery = { ...query, page: newPage.toString() };
+
+    router.push({
+      pathname: router.pathname,
+      query: updatedQuery,
+    });
   };
 
   return (
