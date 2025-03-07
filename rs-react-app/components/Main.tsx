@@ -1,37 +1,25 @@
-import { FC } from 'react';
 import { CardList } from './CardList';
 import { Pagination } from './Pagination';
-import { useSelector } from 'react-redux';
-import { Flayout } from './Flayout';
-import { useRouter } from 'next/router';
-import { DetailedCard } from './DetailedCard';
-import { RootState } from '../store/store';
-import { selectAllChecks } from '../features/check';
+import { DetailedCardWrapper, FlayoutWrapper } from './DetailedCardWrapper';
+import { fetchResults } from '../services/fetchApi';
 
-export const Main: FC = () => {
-  const { results, totalPages } = useSelector(
-    (state: RootState) => state.results
-  );
-  const router = useRouter();
+interface PageProps {
+  name?: string;
+  page?: string;
+}
 
-  const isDetailsPage = router.pathname.startsWith('/details/');
-
-  let page = parseInt(router.query.page as string) || 0;
-  if (page > totalPages) {
-    page = totalPages;
-  }
-  const checkedItems = useSelector(selectAllChecks);
+export const Main = async ({ name = 'a', page = '0' }: PageProps) => {
+  const results = await fetchResults(name, page);
 
   return (
     <main>
       <div className="main-container">
-        <CardList />
-        {isDetailsPage && <DetailedCard />}
+        <CardList results={results.animals} />
+        <DetailedCardWrapper />
       </div>
-      {Array.isArray(results) && results.length > 0 && (
-        <Pagination totalPages={totalPages} currentPage={page} />
-      )}
-      {checkedItems.length > 0 && <Flayout />}
+      <Pagination />
+      <footer />
+      <FlayoutWrapper />
     </main>
   );
 };

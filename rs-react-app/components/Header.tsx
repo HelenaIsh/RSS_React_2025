@@ -1,3 +1,5 @@
+'use client';
+
 import React, { FC } from 'react';
 import { SearchForm } from './SearchForm';
 import { useTheme } from '../context/ThemeContext';

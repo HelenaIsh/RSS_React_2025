@@ -4,10 +4,12 @@ import '@testing-library/jest-dom';
 import { vi, expect, test, describe, beforeEach } from 'vitest';
 import { fetchSingleData } from '../services/fetchSingleData';
 import { ThemeProvider } from '../context/ThemeContext';
-import { useRouter } from 'next/router';
+import { useRouter, useSearchParams, useParams } from 'next/navigation';
 
-vi.mock('next/router', () => ({
+vi.mock('next/navigation', () => ({
   useRouter: vi.fn(),
+  useSearchParams: vi.fn(),
+  useParams: vi.fn(),
 }));
 
 vi.mock('../services/fetchSingleData', () => ({
@@ -16,7 +18,6 @@ vi.mock('../services/fetchSingleData', () => ({
 
 describe('DetailedCard', () => {
   const pushMock = vi.fn();
-  const setSearchParamsMock = vi.fn();
 
   const renderDetailedCard = () => {
     return render(
@@ -28,35 +29,27 @@ describe('DetailedCard', () => {
 
   beforeEach(() => {
     pushMock.mockClear();
-    setSearchParamsMock.mockClear();
+
     vi.mocked(useRouter).mockReturnValue({
       push: pushMock,
-      query: { id: '123' },
-      route: '/',
-      pathname: '/',
-      asPath: '/',
-      basePath: '',
-      isLocaleDomain: false,
-      isReady: true,
-      isPreview: false,
-      isFallback: false,
-      events: {
-        on: vi.fn(),
-        off: vi.fn(),
-        emit: vi.fn(),
-      },
-      reload: vi.fn(),
       back: vi.fn(),
       forward: vi.fn(),
-      prefetch: vi.fn(),
+      refresh: vi.fn(),
       replace: vi.fn(),
-      beforePopState: vi.fn(),
+      prefetch: vi.fn(),
     });
+
+    vi.mocked(useParams).mockReturnValue({
+      id: '123',
+    });
+
+    vi.mocked(useSearchParams).mockReturnValue({
+      get: (key: string) => (key === 'id' ? '123' : null),
+    } as ReturnType<typeof useSearchParams>);
   });
 
   test('should display a loading spinner initially', () => {
     renderDetailedCard();
-
     expect(screen.getByTestId('spinner')).toBeInTheDocument();
   });
 

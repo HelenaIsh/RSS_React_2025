@@ -2,46 +2,34 @@ import { screen, fireEvent } from '@testing-library/react';
 import { vi, expect, test, describe, beforeEach } from 'vitest';
 import { Card } from './Card';
 import '@testing-library/jest-dom';
-import { useRouter } from 'next/router';
+import { useRouter, useSearchParams } from 'next/navigation';
 import { customRender } from './customRender';
 
-vi.mock('next/router', () => ({
+vi.mock('next/navigation', () => ({
   useRouter: vi.fn(),
+  useSearchParams: vi.fn(),
 }));
 
 describe('Card Component', () => {
-  let mockPush: ReturnType<typeof vi.fn>;
-  let mockRouter: ReturnType<typeof createMockRouter>;
-
-  const createMockRouter = () => ({
-    push: vi.fn(),
-    query: { query: 'test' },
-    route: '/',
-    pathname: '/',
-    asPath: '/',
-    basePath: '',
-    isLocaleDomain: false,
-    isReady: true,
-    isPreview: false,
-    isFallback: false,
-    events: {
-      on: vi.fn(),
-      off: vi.fn(),
-      emit: vi.fn(),
-    },
-    reload: vi.fn(),
-    back: vi.fn(),
-    forward: vi.fn(),
-    prefetch: vi.fn(),
-    replace: vi.fn(),
-    beforePopState: vi.fn(),
-  });
+  const pushMock = vi.fn();
 
   beforeEach(() => {
-    mockPush = vi.fn();
-    mockRouter = createMockRouter();
-    mockRouter.push = mockPush;
-    vi.mocked(useRouter).mockImplementation(() => mockRouter);
+    pushMock.mockClear();
+
+    vi.mocked(useRouter).mockReturnValue({
+      push: pushMock,
+      back: vi.fn(),
+      forward: vi.fn(),
+      refresh: vi.fn(),
+      replace: vi.fn(),
+      prefetch: vi.fn(),
+    });
+
+    vi.mocked(useSearchParams).mockReturnValue(
+      new URLSearchParams('page=2') as unknown as ReturnType<
+        typeof useSearchParams
+      >
+    );
   });
 
   test('renders the relevant card data', () => {
@@ -76,9 +64,6 @@ describe('Card Component', () => {
     const cardElement = screen.getByText('Card Title');
     fireEvent.click(cardElement);
 
-    expect(mockPush).toHaveBeenCalledWith({
-      pathname: '/details/1',
-      query: { query: 'test' },
-    });
+    expect(pushMock).toHaveBeenCalledWith('/details/1?page=2');
   });
 });

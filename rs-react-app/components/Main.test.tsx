@@ -1,205 +1,44 @@
+import { describe, test, expect, vi } from 'vitest';
 import { render, screen } from '@testing-library/react';
-import { Provider } from 'react-redux';
-import configureStore, { MockStoreEnhanced } from 'redux-mock-store';
 import { Main } from './Main';
-import { vi, describe, test, expect, beforeEach } from 'vitest';
-import { ThemeContext } from '../context/ThemeContext';
-import { AppDispatch, RootState } from '../store/store';
 import '@testing-library/jest-dom';
-import { useRouter } from 'next/router';
 
-vi.mock('next/router', () => ({
-  useRouter: vi.fn(),
+vi.mock('./CardList', () => ({
+  CardList: () => <div data-testid="card-list">CardList</div>,
 }));
 
-const mockStore = configureStore<RootState, AppDispatch>([]);
+vi.mock('./Pagination', () => ({
+  Pagination: () => <div data-testid="pagination">Pagination</div>,
+}));
+
+vi.mock('./DetailedCardWrapper', () => ({
+  DetailedCardWrapper: () => (
+    <div data-testid="detailed-card-wrapper">DetailedCardWrapper</div>
+  ),
+  FlayoutWrapper: () => <div data-testid="flayout-wrapper">FlayoutWrapper</div>,
+}));
+
+vi.mock('../services/fetchApi', () => ({
+  fetchResults: vi.fn().mockResolvedValue({
+    animals: [
+      { id: 1, name: 'Animal 1' },
+      { id: 2, name: 'Animal 2' },
+    ],
+  }),
+}));
 
 describe('Main Component', () => {
-  let store: MockStoreEnhanced<RootState, AppDispatch>;
-
-  beforeEach(() => {
-    store = mockStore({
-      checks: { selectedIds: ['ANMA0000044745'], itemDetails: [] },
-      results: {
-        results: [
-          {
-            uid: 'ANMA0000044745',
-            name: 'Ghergher beast',
-            earthAnimal: false,
-            earthInsect: false,
-            avian: false,
-            canine: false,
-            feline: false,
-          },
-        ],
-        totalPages: 5,
-        loading: false,
-        error: null,
-      },
-    } as RootState);
-    store.dispatch = vi.fn((action) =>
-      typeof action === 'function'
-        ? action(store.dispatch, store.getState)
-        : action
-    );
-  });
-
-  test('renders correctly with results and pagination', () => {
-    const pushMock = vi.fn();
-    vi.mocked(useRouter).mockReturnValue({
-      push: pushMock,
-      pathname: '/',
-      query: { page: '1' },
-      route: '/',
-      asPath: '/',
-      basePath: '',
-      isLocaleDomain: false,
-      isReady: true,
-      isPreview: false,
-      isFallback: false,
-      events: {
-        on: vi.fn(),
-        off: vi.fn(),
-        emit: vi.fn(),
-      },
-      reload: vi.fn(),
-      back: vi.fn(),
-      forward: vi.fn(),
-      prefetch: vi.fn(),
-      replace: vi.fn(),
-      beforePopState: vi.fn(),
-    });
-
-    render(
-      <Provider store={store}>
-        <ThemeContext.Provider value={{ theme: 'light' }}>
-          <Main />
-        </ThemeContext.Provider>
-      </Provider>
-    );
+  test('renders the Main component with mocked data', async () => {
+    const { container } = render(await Main({ name: 'a', page: '0' }));
 
     expect(screen.getByTestId('card-list')).toBeInTheDocument();
+
     expect(screen.getByTestId('pagination')).toBeInTheDocument();
-  });
 
-  test('renders Flayout when items are checked', () => {
-    const pushMock = vi.fn();
-    vi.mocked(useRouter).mockReturnValue({
-      push: pushMock,
-      pathname: '/',
-      query: { page: '1' },
-      route: '/',
-      asPath: '/',
-      basePath: '',
-      isLocaleDomain: false,
-      isReady: true,
-      isPreview: false,
-      isFallback: false,
-      events: {
-        on: vi.fn(),
-        off: vi.fn(),
-        emit: vi.fn(),
-      },
-      reload: vi.fn(),
-      back: vi.fn(),
-      forward: vi.fn(),
-      prefetch: vi.fn(),
-      replace: vi.fn(),
-      beforePopState: vi.fn(),
-    });
+    expect(screen.getByTestId('detailed-card-wrapper')).toBeInTheDocument();
 
-    render(
-      <Provider store={store}>
-        <ThemeContext.Provider value={{ theme: 'light' }}>
-          <Main />
-        </ThemeContext.Provider>
-      </Provider>
-    );
+    expect(screen.getByTestId('flayout-wrapper')).toBeInTheDocument();
 
-    expect(screen.getByTestId('flayout')).toBeInTheDocument();
-  });
-
-  test('renders DetailedCard when on details page', () => {
-    const pushMock = vi.fn();
-    vi.mocked(useRouter).mockReturnValue({
-      push: pushMock,
-      pathname: '/details/123',
-      query: { id: '123', page: '1' },
-      route: '/details/[id]',
-      asPath: '/details/123',
-      basePath: '',
-      isLocaleDomain: false,
-      isReady: true,
-      isPreview: false,
-      isFallback: false,
-      events: {
-        on: vi.fn(),
-        off: vi.fn(),
-        emit: vi.fn(),
-      },
-      reload: vi.fn(),
-      back: vi.fn(),
-      forward: vi.fn(),
-      prefetch: vi.fn(),
-      replace: vi.fn(),
-      beforePopState: vi.fn(),
-    });
-
-    render(
-      <Provider store={store}>
-        <ThemeContext.Provider value={{ theme: 'light' }}>
-          <Main />
-        </ThemeContext.Provider>
-      </Provider>
-    );
-
-    expect(screen.getByTestId('detailed-card')).toBeInTheDocument();
-  });
-
-  test('does not render Pagination when results are empty', () => {
-    store = mockStore({
-      checks: { selectedIds: [], itemDetails: [] },
-      results: {
-        results: [],
-        totalPages: 0,
-        loading: false,
-        error: null,
-      },
-    } as RootState);
-
-    const pushMock = vi.fn();
-    vi.mocked(useRouter).mockReturnValue({
-      push: pushMock,
-      pathname: '/',
-      query: { page: '1' },
-      route: '/',
-      asPath: '/',
-      basePath: '',
-      isLocaleDomain: false,
-      isReady: true,
-      isPreview: false,
-      isFallback: false,
-      events: {
-        on: vi.fn(),
-        off: vi.fn(),
-        emit: vi.fn(),
-      },
-      reload: vi.fn(),
-      back: vi.fn(),
-      forward: vi.fn(),
-      prefetch: vi.fn(),
-      replace: vi.fn(),
-      beforePopState: vi.fn(),
-    });
-
-    render(
-      <Provider store={store}>
-        <ThemeContext.Provider value={{ theme: 'light' }}>
-          <Main />
-        </ThemeContext.Provider>
-      </Provider>
-    );
-
-    expect(screen.queryByTestId('pagination')).not.toBeInTheDocument();
+    expect(container.querySelector('.main-container')).toBeInTheDocument();
   });
 });

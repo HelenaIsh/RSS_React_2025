@@ -1,5 +1,7 @@
+'use client';
+
 import { FC } from 'react';
-import { useRouter } from 'next/router';
+import { useRouter, useSearchParams } from 'next/navigation';
 import { useTheme } from '../context/ThemeContext';
 import { useDispatch, useSelector } from 'react-redux';
 import { addCheck, selectAllChecks } from '../features/check';
@@ -13,7 +15,7 @@ export const Card: FC<CardProps> = ({ element, id }) => {
   const { theme } = useTheme();
   const dispatch = useDispatch();
   const router = useRouter();
-  const { query } = router;
+  const searchParams = useSearchParams();
 
   let title = '';
   if (element && typeof element === 'object') {
@@ -31,13 +33,8 @@ export const Card: FC<CardProps> = ({ element, id }) => {
     }
     const target = e.target as HTMLElement;
     const row = target.closest('.row');
-    const restQuery = { ...query };
-    delete restQuery.id;
     if (row) {
-      router.push({
-        pathname: `/details/${row.id}`,
-        query: restQuery,
-      });
+      router.push(`/details/${row.id}?${searchParams.toString()}`);
     }
   };
 

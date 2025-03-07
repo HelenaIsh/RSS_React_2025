@@ -40,7 +40,19 @@ describe('CardList Component', () => {
 
     render(
       <Provider store={store}>
-        <CardList />
+        <CardList
+          results={[
+            {
+              uid: 'ANMA0000044745',
+              name: 'Ghergher beast',
+              earthAnimal: false,
+              earthInsect: false,
+              avian: false,
+              canine: false,
+              feline: false,
+            },
+          ]}
+        />
       </Provider>
     );
 
@@ -60,7 +72,7 @@ describe('CardList Component', () => {
     } as RootState);
     render(
       <Provider store={store}>
-        <CardList />
+        <CardList results={null} />
       </Provider>
     );
 
@@ -79,7 +91,7 @@ describe('CardList Component', () => {
     } as RootState);
     render(
       <Provider store={store}>
-        <CardList />
+        <CardList results={'error message'} />
       </Provider>
     );
 
@@ -98,7 +110,7 @@ describe('CardList Component', () => {
     } as RootState);
     render(
       <Provider store={store}>
-        <CardList />
+        <CardList results={[]} />
       </Provider>
     );
     expect(screen.getByText('No results found')).toBeInTheDocument();

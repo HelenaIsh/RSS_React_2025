@@ -1,11 +1,7 @@
 import { FC } from 'react';
 import { Card } from './Card';
-import { useSelector } from 'react-redux';
-import { RootState } from '../store/store';
 
-export const CardList: FC = () => {
-  const { results } = useSelector((state: RootState) => state.results);
-
+export const CardList: FC<{ results: unknown }> = ({ results }) => {
   return (
     <>
       {typeof results === 'string' ? (

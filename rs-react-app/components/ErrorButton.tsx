@@ -1,3 +1,5 @@
+'use client';
+
 import { FC, useState } from 'react';
 
 export const ErrorButton: FC = () => {
