@@ -3,6 +3,7 @@ form {
   padding: 20px;
   border: 1px solid #ccc;
   border-radius: 8px;
+  width: 50%;
 }
 
 .form-input {
@@ -56,4 +57,19 @@ button:hover {
 .one-line-form-input {
   display: flex;
   justify-content: space-between;
+}
+.password-strength-0 {
+  outline-color: red;
+}
+.password-strength-1 {
+  outline-color: orange;
+}
+.password-strength-2 {
+  outline-color: yellow;
+}
+.password-strength-3 {
+  outline-color: greenyellow;
+}
+.password-strength-4 {
+  outline-color: green;
 }

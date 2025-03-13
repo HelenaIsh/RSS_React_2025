@@ -13,17 +13,36 @@ export interface FormState {
   countries?: string[];
 }
 
-const initialState: FormState = {
-  name: '',
-  age: 0,
-  email: '',
-  password: '',
-  confirmPassword: '',
-  gender: '',
-  acceptTnC: false,
-  picture: null,
-  country: '',
-  countries: ['USA', 'Canada', 'Germany', 'Russia', 'Australia', 'Brazil'],
+interface FormSliceState {
+  oldState: FormState;
+  newState: FormState;
+}
+
+const initialState: FormSliceState = {
+  oldState: {
+    name: '',
+    age: 0,
+    email: '',
+    password: '',
+    confirmPassword: '',
+    gender: '',
+    acceptTnC: false,
+    picture: null,
+    country: '',
+    countries: ['USA', 'Canada', 'Germany', 'Russia', 'Australia', 'Brazil'],
+  },
+  newState: {
+    name: '',
+    age: 0,
+    email: '',
+    password: '',
+    confirmPassword: '',
+    gender: '',
+    acceptTnC: false,
+    picture: null,
+    country: '',
+    countries: ['USA', 'Canada', 'Germany', 'Russia', 'Australia', 'Brazil'],
+  },
 };
 
 const formSlice = createSlice({
@@ -31,22 +50,20 @@ const formSlice = createSlice({
   initialState,
   reducers: {
     setUncontrolledData(state, action: PayloadAction<FormState>) {
-      state.name = action.payload.name;
-      state.age = action.payload.age;
-      state.email = action.payload.email;
-      state.password = action.payload.password;
-      state.confirmPassword = action.payload.confirmPassword;
-      state.gender = action.payload.gender;
-      state.acceptTnC = action.payload.acceptTnC;
-      state.picture = action.payload.picture;
-      state.country = action.payload.country;
-    },
-    setPicture(state, action: PayloadAction<string | null>) {
-      state.picture = action.payload;
+      state.oldState = JSON.parse(JSON.stringify(state.newState));
+      state.newState.name = action.payload.name;
+      state.newState.age = action.payload.age;
+      state.newState.email = action.payload.email;
+      state.newState.password = action.payload.password;
+      state.newState.confirmPassword = action.payload.confirmPassword;
+      state.newState.gender = action.payload.gender;
+      state.newState.acceptTnC = action.payload.acceptTnC;
+      state.newState.picture = action.payload.picture;
+      state.newState.country = action.payload.country;
     },
   },
 });
 
-export const { setUncontrolledData, setPicture } = formSlice.actions;
+export const { setUncontrolledData } = formSlice.actions;
 
 export default formSlice.reducer;
