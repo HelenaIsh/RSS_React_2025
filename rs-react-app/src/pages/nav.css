@@ -30,19 +30,3 @@ nav ul li a:hover {
 nav ul li a.active {
   color: #ff6347;
 }
-
-.highlighted {
-  border: 1px solid lightgreen;
-  border-radius: 5px;
-  animation: flash 1s infinite;
-}
-
-@keyframes flash {
-  0%,
-  100% {
-    border-color: transparent;
-  }
-  50% {
-    border-color: lightgreen;
-  }
-}
