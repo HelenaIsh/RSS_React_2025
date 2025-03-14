@@ -1,0 +1,15 @@
+.highlighted {
+  outline: 1px solid lightgreen;
+  border-radius: 5px;
+  animation: flash 1s infinite;
+}
+
+@keyframes flash {
+  0%,
+  100% {
+    outline-color: transparent;
+  }
+  50% {
+    outline-color: lightgreen;
+  }
+}
