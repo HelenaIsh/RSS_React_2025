@@ -2,3 +2,36 @@
   font-weight: bold;
   color: red;
 }
+nav {
+    background-color: #333;
+    padding: 10px 20px;
+  }
+  
+  nav ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    gap: 20px;
+  }
+  
+  nav ul li {
+    margin: 0;
+  }
+  
+  nav ul li a {
+    color: white;
+    text-decoration: none;
+    font-size: 16px;
+    font-weight: bold;
+    transition: color 0.3s ease;
+  }
+  
+  nav ul li a:hover {
+    color: #ff6347;
+  }
+  
+  nav ul li a.active {
+    color: #ff6347;
+  }
+  
