@@ -5,34 +5,8 @@ import { useNavigate } from 'react-router-dom';
 import { setUncontrolledData, FormState } from '../formSlice';
 import { RootState } from '../store';
 import './form.css';
-import { toBase64 } from '../utils';
+import { toBase64, validationSchema } from '../utils';
 import { Header } from '../components/Header';
-
-const validationSchema = Yup.object({
-  name: Yup.string()
-    .matches(/^[A-Z]/, 'Name must start with an uppercase letter')
-    .required('Enter your name'),
-  age: Yup.number()
-    .positive('Age cannot be negative')
-    .integer('Age must be an integer')
-    .required('Enter your age'),
-  email: Yup.string().email('Invalid email').required('Enter your email'),
-  password: Yup.string()
-    .matches(/[A-Z]/, 'Password must contain at least one uppercase letter')
-    .matches(/[a-z]/, 'Password must contain at least one lowercase letter')
-    .matches(/\d/, 'Password must contain at least one digit')
-    .matches(/[\W_]/, 'Password must contain at least one special character')
-    .required(),
-  confirmPassword: Yup.string()
-    .oneOf([Yup.ref('password')], 'Passwords do not match')
-    .required('Confirm your password'),
-  gender: Yup.string().required('Select gender'),
-  acceptTnC: Yup.bool()
-    .oneOf([true], 'You must agree to the terms and conditions')
-    .required(),
-  picture: Yup.mixed().required('Upload a picture'),
-  country: Yup.string().required('Select a country'),
-});
 
 export const UncontrolledFormPage: FC = () => {
   const dispatch = useDispatch();
