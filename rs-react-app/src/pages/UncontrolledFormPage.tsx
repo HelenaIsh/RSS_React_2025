@@ -1,10 +1,12 @@
 import { FC, useRef, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import * as Yup from 'yup';
-import { Link, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { setUncontrolledData, FormState } from '../formSlice';
 import { RootState } from '../store';
 import './form.css';
+import { toBase64 } from '../utils';
+import { Header } from '../components/Header';
 
 const validationSchema = Yup.object({
   name: Yup.string()
@@ -31,15 +33,6 @@ const validationSchema = Yup.object({
   picture: Yup.mixed().required('Upload a picture'),
   country: Yup.string().required('Select a country'),
 });
-
-const toBase64 = (file: File): Promise<string> => {
-  return new Promise((resolve, reject) => {
-    const reader = new FileReader();
-    reader.readAsDataURL(file);
-    reader.onload = () => resolve(reader.result as string);
-    reader.onerror = reject;
-  });
-};
 
 export const UncontrolledFormPage: FC = () => {
   const dispatch = useDispatch();
@@ -126,19 +119,7 @@ export const UncontrolledFormPage: FC = () => {
 
   return (
     <>
-      <nav>
-        <ul>
-          <li>
-            <Link to="/">Main</Link>
-          </li>
-          <li>
-            <Link to="/form-uncontrolled">Uncontrolled Form</Link>
-          </li>
-          <li>
-            <Link to="/form-hook-form">Hook Form</Link>
-          </li>
-        </ul>
-      </nav>
+      <Header />
       <form ref={formRef} onSubmit={handleSubmit}>
         <div className="form-input">
           <label htmlFor="name">Name</label>

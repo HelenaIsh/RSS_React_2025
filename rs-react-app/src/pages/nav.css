@@ -38,7 +38,8 @@ nav ul li a.active {
 }
 
 @keyframes flash {
-  0%, 100% {
+  0%,
+  100% {
     border-color: transparent;
   }
   50% {
