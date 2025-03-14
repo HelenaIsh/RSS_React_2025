@@ -123,19 +123,37 @@ export const UncontrolledFormPage: FC = () => {
       <form ref={formRef} onSubmit={handleSubmit}>
         <div className="form-input">
           <label htmlFor="name">Name</label>
-          <input ref={nameRef} type="text" id="name" name="name" />
+          <input
+            ref={nameRef}
+            type="text"
+            id="name"
+            name="name"
+            autoComplete="name"
+          />
           <p className="error">{errors.name}</p>
         </div>
 
         <div className="form-input">
           <label htmlFor="age">Age</label>
-          <input ref={ageRef} type="number" id="age" name="age" />
+          <input
+            ref={ageRef}
+            type="number"
+            id="age"
+            name="age"
+            autoComplete="age"
+          />
           <p className="error">{errors.age}</p>
         </div>
 
         <div className="form-input">
           <label htmlFor="email">Email</label>
-          <input ref={emailRef} type="email" id="email" name="email" />
+          <input
+            ref={emailRef}
+            type="email"
+            id="email"
+            name="email"
+            autoComplete="email"
+          />
           <p className="error">{errors.email}</p>
         </div>
 
@@ -148,6 +166,7 @@ export const UncontrolledFormPage: FC = () => {
             name="password"
             onChange={handlePasswordChange}
             className={`password-strength-${passwordStrength.toString()}`}
+            autoComplete="new-password"
           />
           <p className="error">{errors.password}</p>
         </div>
@@ -159,13 +178,19 @@ export const UncontrolledFormPage: FC = () => {
             type="password"
             id="confirmPassword"
             name="confirmPassword"
+            autoComplete="confirm-password"
           />
           <p className="error">{errors.confirmPassword}</p>
         </div>
 
         <div className="form-input">
           <label htmlFor="gender">Gender</label>
-          <select ref={genderRef} id="gender" name="gender">
+          <select
+            ref={genderRef}
+            id="gender"
+            name="gender"
+            autoComplete="gender"
+          >
             <option value="male">Male</option>
             <option value="female">Female</option>
           </select>
@@ -200,7 +225,12 @@ export const UncontrolledFormPage: FC = () => {
 
         <div className="form-input">
           <label htmlFor="country">Country</label>
-          <select ref={countryRef} id="country" name="country">
+          <select
+            ref={countryRef}
+            id="country"
+            name="country"
+            autoComplete="country"
+          >
             {countries?.map((country: string) => (
               <option key={country} value={country}>
                 {country}

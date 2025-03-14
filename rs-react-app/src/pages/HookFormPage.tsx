@@ -102,7 +102,12 @@ export const HookFormPage: FC = () => {
       <form onSubmit={handleSubmit(onSubmit)}>
         <div className="form-input">
           <label htmlFor="name">Name</label>
-          <input {...register('name')} type="text" id="name" />
+          <input
+            {...register('name')}
+            type="text"
+            id="name"
+            autoComplete="name"
+          />
           <p className="error">{errors.name?.message}</p>
         </div>
 
@@ -112,13 +117,19 @@ export const HookFormPage: FC = () => {
             {...register('age', { valueAsNumber: true })}
             type="number"
             id="age"
+            autoComplete="age"
           />
           <p className="error">{errors.age?.message}</p>
         </div>
 
         <div className="form-input">
           <label htmlFor="email">Email</label>
-          <input {...register('email')} type="email" id="email" />
+          <input
+            {...register('email')}
+            type="email"
+            id="email"
+            autoComplete="email"
+          />
           <p className="error">{errors.email?.message}</p>
         </div>
 
@@ -129,6 +140,7 @@ export const HookFormPage: FC = () => {
             type="password"
             id="password"
             className={`password-strength-${handlePasswordChange(password).toString()}`}
+            autoComplete="new-password"
           />
           <p className="error">{errors.password?.message}</p>
         </div>
@@ -139,13 +151,14 @@ export const HookFormPage: FC = () => {
             {...register('confirmPassword')}
             type="password"
             id="confirmPassword"
+            autoComplete="confirm-password"
           />
           <p className="error">{errors.confirmPassword?.message}</p>
         </div>
 
         <div className="form-input">
           <label htmlFor="gender">Gender</label>
-          <select {...register('gender')} id="gender">
+          <select {...register('gender')} id="gender" autoComplete="gender">
             <option value="male">Male</option>
             <option value="female">Female</option>
           </select>
@@ -173,7 +186,7 @@ export const HookFormPage: FC = () => {
 
         <div className="form-input">
           <label htmlFor="country">Country</label>
-          <select {...register('country')} id="country">
+          <select {...register('country')} id="country" autoComplete="country">
             {countries?.map((country: string) => (
               <option key={country} value={country}>
                 {country}
