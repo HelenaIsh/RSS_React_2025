@@ -1,4 +1,4 @@
-import { useState, useEffect, useMemo, useCallback } from 'react';
+import { useState, useEffect, useMemo } from 'react';
 import './App.css';
 import { Country, CountryCard } from './components/Country';
 
@@ -16,24 +16,28 @@ const App: React.FC = () => {
       .catch((error) => console.error('Error fetching countries:', error));
   }, []);
 
-  const filteredCountries =  useMemo(() => countries
-    .filter((country) =>
-      country.name.common.toLowerCase().includes(search.toLowerCase())
-    )
-    .filter((country) => (region === 'all' ? true : country.region === region))
-    .sort((a, b) => {
-      if (sortKey === 'name') {
-        return sortOrder === 'asc'
-          ? a.name.common.localeCompare(b.name.common)
-          : b.name.common.localeCompare(a.name.common);
-      } else {
-        return sortOrder === 'asc'
-          ? a.population - b.population
-          : b.population - a.population;
-      }
-    }), [search, region, sortOrder, countries]);
-
-
+  const filteredCountries = useMemo(
+    () =>
+      countries
+        .filter((country) =>
+          country.name.common.toLowerCase().includes(search.toLowerCase())
+        )
+        .filter((country) =>
+          region === 'all' ? true : country.region === region
+        )
+        .sort((a, b) => {
+          if (sortKey === 'name') {
+            return sortOrder === 'asc'
+              ? a.name.common.localeCompare(b.name.common)
+              : b.name.common.localeCompare(a.name.common);
+          } else {
+            return sortOrder === 'asc'
+              ? a.population - b.population
+              : b.population - a.population;
+          }
+        }),
+    [search, region, sortOrder, countries, sortKey]
+  );
 
   return (
     <div style={{ padding: '20px' }}>
