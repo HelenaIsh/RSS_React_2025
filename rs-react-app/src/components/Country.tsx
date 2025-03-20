@@ -1,4 +1,4 @@
-import { FC } from 'react';
+import { FC, memo } from 'react';
 
 export interface Country {
   name: { common: string };
@@ -7,7 +7,7 @@ export interface Country {
   flags: { png: string };
 }
 
-export const CountryCard: FC<{ country: Country }> = ({ country }) => (
+export const CountryCard: FC<{ country: Country }> = memo(({ country }) => (
   <div style={{ border: '1px solid #ccc', padding: '10px', margin: '10px' }}>
     <img
       src={country.flags.png}
@@ -18,4 +18,4 @@ export const CountryCard: FC<{ country: Country }> = ({ country }) => (
     <p>Population: {country.population}</p>
     <p>Region: {country.region}</p>
   </div>
-);
+));

@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useMemo, useCallback } from 'react';
 import './App.css';
 import { Country, CountryCard } from './components/Country';
 
@@ -16,7 +16,7 @@ const App: React.FC = () => {
       .catch((error) => console.error('Error fetching countries:', error));
   }, []);
 
-  const filteredCountries = countries
+  const filteredCountries =  useMemo(() => countries
     .filter((country) =>
       country.name.common.toLowerCase().includes(search.toLowerCase())
     )
@@ -31,7 +31,9 @@ const App: React.FC = () => {
           ? a.population - b.population
           : b.population - a.population;
       }
-    });
+    }), [search, region, sortOrder, countries]);
+
+
 
   return (
     <div style={{ padding: '20px' }}>
