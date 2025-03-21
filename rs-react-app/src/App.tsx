@@ -1,0 +1,126 @@
+import { useState, useEffect, useMemo, useCallback } from 'react';
+import './App.css';
+import { Country, CountryCard } from './components/Country';
+
+const App: React.FC = () => {
+  const [countries, setCountries] = useState<Country[]>([]);
+  const [search, setSearch] = useState('');
+  const [region, setRegion] = useState('all');
+  const [sortKey, setSortKey] = useState<'name' | 'population'>('name');
+  const [sortOrder, setSortOrder] = useState<'asc' | 'desc'>('asc');
+  const [visitedCountries, setVisitedCountries] = useState<string[]>(
+    JSON.parse(localStorage.getItem('visitedCountries') || '[]')
+  );
+
+  useEffect(() => {
+    fetch('https://restcountries.com/v3.1/all')
+      .then((response) => response.json())
+      .then((data) => setCountries(data))
+      .catch((error) => console.error('Error fetching countries:', error));
+  }, []);
+
+  useEffect(() => {
+    localStorage.setItem('visitedCountries', JSON.stringify(visitedCountries));
+  }, [visitedCountries]);
+
+  const toggleVisited = useCallback((countryName: string) => {
+    setVisitedCountries((prev) =>
+      prev.includes(countryName)
+        ? prev.filter((name) => name !== countryName)
+        : [...prev, countryName]
+    );
+  }, []);
+
+  const filteredCountries = useMemo(
+    () =>
+      countries
+        .filter((country) =>
+          country.name.common.toLowerCase().includes(search.toLowerCase())
+        )
+        .filter((country) =>
+          region === 'all' ? true : country.region === region
+        )
+        .sort((a, b) => {
+          if (sortKey === 'name') {
+            return sortOrder === 'asc'
+              ? a.name.common.localeCompare(b.name.common)
+              : b.name.common.localeCompare(a.name.common);
+          } else {
+            return sortOrder === 'asc'
+              ? a.population - b.population
+              : b.population - a.population;
+          }
+        }),
+    [search, region, sortOrder, countries, sortKey]
+  );
+
+  const visitedSet = useMemo(
+    () => new Set(visitedCountries),
+    [visitedCountries]
+  );
+
+  const handleSeacrh = useCallback(
+    (e: React.ChangeEvent<HTMLInputElement>) => setSearch(e.target.value),
+    []
+  );
+
+  const handleRegionChange = useCallback(
+    (e: React.ChangeEvent<HTMLSelectElement>) => setRegion(e.target.value),
+    []
+  );
+
+  const handleSortkey = useCallback(
+    (e: React.ChangeEvent<HTMLSelectElement>) =>
+      setSortKey(e.target.value as 'name' | 'population'),
+    []
+  );
+
+  const handleSortOrder = useCallback(
+    () => setSortOrder(sortOrder === 'asc' ? 'desc' : 'asc'),
+    [sortOrder]
+  );
+
+  return (
+    <div style={{ padding: '20px' }}>
+      <input
+        type="text"
+        placeholder="Search countries"
+        value={search}
+        onChange={handleSeacrh}
+      />
+      <select value={region} onChange={handleRegionChange}>
+        <option value="all">All Regions</option>
+        <option value="Africa">Africa</option>
+        <option value="Americas">Americas</option>
+        <option value="Asia">Asia</option>
+        <option value="Europe">Europe</option>
+        <option value="Oceania">Oceania</option>
+      </select>
+      <select value={sortKey} onChange={handleSortkey}>
+        <option value="name">Sort by Name</option>
+        <option value="population">Sort by Population</option>
+      </select>
+      <button onClick={handleSortOrder}>
+        {sortOrder === 'asc' ? 'Ascending' : 'Descending'}
+      </button>
+      <div
+        style={{
+          display: 'grid',
+          gridTemplateColumns: 'repeat(auto-fill, minmax(200px, 1fr))',
+          gap: '10px',
+        }}
+      >
+        {filteredCountries.map((country) => (
+          <CountryCard
+            key={country.name.common}
+            country={country}
+            visited={visitedSet.has(country.name.common)}
+            toggleVisited={toggleVisited}
+          />
+        ))}
+      </div>
+    </div>
+  );
+};
+
+export default App;
