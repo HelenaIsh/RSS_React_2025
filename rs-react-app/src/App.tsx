@@ -59,15 +59,36 @@ const App: React.FC = () => {
     [visitedCountries]
   );
 
+  const handleSeacrh = useCallback(
+    (e: React.ChangeEvent<HTMLInputElement>) => setSearch(e.target.value),
+    []
+  );
+
+  const handleRegionChange = useCallback(
+    (e: React.ChangeEvent<HTMLSelectElement>) => setRegion(e.target.value),
+    []
+  );
+
+  const handleSortkey = useCallback(
+    (e: React.ChangeEvent<HTMLSelectElement>) =>
+      setSortKey(e.target.value as 'name' | 'population'),
+    []
+  );
+
+  const handleSortOrder = useCallback(
+    () => setSortOrder(sortOrder === 'asc' ? 'desc' : 'asc'),
+    [sortOrder]
+  );
+
   return (
     <div style={{ padding: '20px' }}>
       <input
         type="text"
         placeholder="Search countries"
         value={search}
-        onChange={(e) => setSearch(e.target.value)}
+        onChange={handleSeacrh}
       />
-      <select value={region} onChange={(e) => setRegion(e.target.value)}>
+      <select value={region} onChange={handleRegionChange}>
         <option value="all">All Regions</option>
         <option value="Africa">Africa</option>
         <option value="Americas">Americas</option>
@@ -75,16 +96,11 @@ const App: React.FC = () => {
         <option value="Europe">Europe</option>
         <option value="Oceania">Oceania</option>
       </select>
-      <select
-        value={sortKey}
-        onChange={(e) => setSortKey(e.target.value as 'name' | 'population')}
-      >
+      <select value={sortKey} onChange={handleSortkey}>
         <option value="name">Sort by Name</option>
         <option value="population">Sort by Population</option>
       </select>
-      <button
-        onClick={() => setSortOrder(sortOrder === 'asc' ? 'desc' : 'asc')}
-      >
+      <button onClick={handleSortOrder}>
         {sortOrder === 'asc' ? 'Ascending' : 'Descending'}
       </button>
       <div
