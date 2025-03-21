@@ -1,4 +1,4 @@
-import { useState, useEffect, useMemo } from 'react';
+import { useState, useEffect, useMemo, useCallback } from 'react';
 import './App.css';
 import { Country, CountryCard } from './components/Country';
 
@@ -8,12 +8,27 @@ const App: React.FC = () => {
   const [region, setRegion] = useState('all');
   const [sortKey, setSortKey] = useState<'name' | 'population'>('name');
   const [sortOrder, setSortOrder] = useState<'asc' | 'desc'>('asc');
+  const [visitedCountries, setVisitedCountries] = useState<string[]>(
+    JSON.parse(localStorage.getItem('visitedCountries') || '[]')
+  );
 
   useEffect(() => {
     fetch('https://restcountries.com/v3.1/all')
       .then((response) => response.json())
       .then((data) => setCountries(data))
       .catch((error) => console.error('Error fetching countries:', error));
+  }, []);
+
+  useEffect(() => {
+    localStorage.setItem('visitedCountries', JSON.stringify(visitedCountries));
+  }, [visitedCountries]);
+
+  const toggleVisited = useCallback((countryName: string) => {
+    setVisitedCountries((prev) =>
+      prev.includes(countryName)
+        ? prev.filter((name) => name !== countryName)
+        : [...prev, countryName]
+    );
   }, []);
 
   const filteredCountries = useMemo(
@@ -37,6 +52,11 @@ const App: React.FC = () => {
           }
         }),
     [search, region, sortOrder, countries, sortKey]
+  );
+
+  const visitedSet = useMemo(
+    () => new Set(visitedCountries),
+    [visitedCountries]
   );
 
   return (
@@ -75,7 +95,12 @@ const App: React.FC = () => {
         }}
       >
         {filteredCountries.map((country) => (
-          <CountryCard key={country.name.common} country={country} />
+          <CountryCard
+            key={country.name.common}
+            country={country}
+            visited={visitedSet.has(country.name.common)}
+            toggleVisited={toggleVisited}
+          />
         ))}
       </div>
     </div>
